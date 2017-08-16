@@ -143,6 +143,7 @@
 				display: block;
 				float: left;
 				width: 100%;
+        margin: 0px;
 				text-align: left;
 				border-top: 1px solid #444;
 				border-left: 1px solid #444;
