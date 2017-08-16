@@ -8,6 +8,8 @@
   ini_set('display_errors', 'On'); 
   error_reporting(E_ALL | E_STRICT);
 
+  $locprefix = "/srv/http";
+
   function escape_str($str) {
     
     $str = str_replace("'", "&#39;", $str);
@@ -174,8 +176,8 @@
               $oldLoc = mysqli_fetch_array(mysqli_query($con, $oldLocSql));
 
               if ($location != $oldLoc['location']) {
-                if (file_exists($oldLoc['location'])) {
-                  //rmdirRec($oldLoc['location']);
+                if (file_exists($locprefix.$oldLoc['location'])) {
+                  //rmdirRec($locprefix.$oldLoc['location']);
                 }
               }
 
@@ -196,8 +198,8 @@
             }
 
             $error = $location;
-            mkdir("/srv/http" . $location, 0775, true) or die("Unable to create directory");             
-            $myfile = fopen("index.php", "w") or die("Unable to write file");
+            mkdir($locprefix.$location, 0775, true) or die("Unable to create directory");             
+            $myfile = fopen($locprefix.$location."index.php", "w") or die("Unable to write file");
             $txt = '<?php $pid=' . $pid . '; include "/index.php"; ?>';
             fwrite($myfile, $txt);
             fclose($myfile);
