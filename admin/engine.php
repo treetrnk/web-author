@@ -177,7 +177,7 @@
 
               if ($location != $oldLoc['location']) {
                 if (file_exists($locprefix.$oldLoc['location'])) {
-                  //rmdirRec($locprefix.$oldLoc['location']);
+                  rmdirRec($locprefix.$oldLoc['location']);
                 }
               }
 
@@ -198,9 +198,11 @@
             }
 
             $error = $location;
-            mkdir($locprefix.$location, 0775, true) or die("Unable to create directory");             
+            if (!file_exists($locprefix.$location)) {
+              mkdir($locprefix.$location, 0775, true) or die("Unable to create directory");             
+            }
             $myfile = fopen($locprefix.$location."index.php", "w") or die("Unable to write file");
-            $txt = '<?php $pid=' . $pid . '; include "/index.php"; ?>';
+            $txt = '<?php $pid=' . $pid . "; include '$locprefix/index.php'; ?>";
             fwrite($myfile, $txt);
             fclose($myfile);
 

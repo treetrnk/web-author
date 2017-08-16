@@ -13,9 +13,8 @@
     die();
   }
 
-  $pid = 2;
-  if (!empty($_GET['pid'])) {
-    $pid = $_GET['pid'];
+  if (empty($pid)) {
+    $pid = 2;
   }
 
   $sql = "SELECT id,title,parent FROM posts WHERE time IS NOT NULL ORDER BY sort ASC,title ASC";
@@ -35,11 +34,11 @@
   if ($thisPost['parent'] != 0) {
     $sql = "SELECT * FROM posts WHERE id = $thisPost[parent] LIMIT 1";
     $parent = mysqli_fetch_array(mysqli_query($con, $sql));
-    $parentli = "<li><a href='?pid=$thisPost[parent]'>$parent[title]</a></li>";
+    $parentli = "<li><a href='$thisPost[location]'>$parent[title]</a></li>";
     if (!empty($parent['parent']) && $parent['parent'] != 0) {
       $sql2 = "SELECT * FROM posts WHERE id = $parent[parent] LIMIT 1";
       $topparent = mysqli_fetch_array(mysqli_query($con, $sql2));
-      $topparentli = "<li><a href='?pid=$parent[parent]'>$topparent[title]</a></li>";
+      $topparentli = "<li><a href='$parent[location]'>$topparent[title]</a></li>";
     }
   }
 
@@ -280,19 +279,19 @@
                 $sql1 = "SELECT * FROM posts WHERE parent = 0 AND time IS NOT NULL ORDER BY sort ASC, title ASC";
                 if ($result1 = mysqli_query($con, $sql1)) {
                   while ($topLink = mysqli_fetch_array($result1)){
-                    echo "<li><a href='?pid=$topLink[id]'>$topLink[title]</a>";
+                    echo "<li><a href='$topLink[location]'>$topLink[title]</a>";
 
                     $sql2 = "SELECT * FROM posts WHERE parent = '$topLink[id]' AND time IS NOT NULL ORDER BY sort ASC, title ASC";
                     if ($result2 = mysqli_query($con, $sql2)) {
                       echo "<ul>";
                       while ($sndLink = mysqli_fetch_array($result2)) {
-                        echo "<li><a href='?pid=$sndLink[id]'>$sndLink[title]</a>";
+                        echo "<li><a href='$sndLink[location]'>$sndLink[title]</a>";
 
                         $sql3 = "SELECT * FROM posts WHERE parent = '$sndLink[id]' AND time IS NOT NULL ORDER BY sort ASC, title ASC";
                         if ($result3 = mysqli_query($con, $sql3)) {
                           echo "<ul>";
                           while ($thrdLink = mysqli_fetch_array($result3)) {
-                            echo "<li><a href='?pid=$thrdLink[id]'>$thrdLink[title]</a></li>";
+                            echo "<li><a href='$thrdLink[location]'>$thrdLink[title]</a></li>";
                           }
                           echo "</ul>";
                         }
@@ -335,21 +334,21 @@
           $sql1 = "SELECT * FROM posts WHERE parent = 0 AND time IS NOT NULL ORDER BY sort ASC, title ASC";
           if ($result1 = mysqli_query($con, $sql1)) {
             while ($topLink = mysqli_fetch_array($result1)){
-              echo "<li><a href='?pid=$topLink[id]'>" . strtoupper($topLink['title']);
+              echo "<li><a href='$topLink[location]'>" . strtoupper($topLink['title']);
 
               $sql2 = "SELECT * FROM posts WHERE parent = '$topLink[id]' AND time IS NOT NULL ORDER BY sort ASC, title ASC";
               if ($result2 = mysqli_query($con, $sql2)) {
                 if (mysqli_num_rows($result2) > 0) {echo " <i class='glyphicon glyphicon-menu-down dropdown'></i>";}
                 echo "</a><ul>";
                 while ($sndLink = mysqli_fetch_array($result2)) {
-                  echo "<li><a href='?pid=$sndLink[id]'>&nbsp;&nbsp;&nbsp;&nbsp; $sndLink[title]";
+                  echo "<li><a href='$sndLink[location]'>&nbsp;&nbsp;&nbsp;&nbsp; $sndLink[title]";
 
                   $sql3 = "SELECT * FROM posts WHERE parent = '$sndLink[id]' AND time IS NOT NULL ORDER BY sort ASC, title ASC";
                   if ($result3 = mysqli_query($con, $sql3)) {
                     if (mysqli_num_rows($result3) > 0) {echo " <i class='glyphicon glyphicon-menu-down dropdown'></i>";}
                     echo "</a><ul>";
                     while ($thrdLink = mysqli_fetch_array($result3)) {
-                      echo "<li><a href='?pid=$thrdLink[id]'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $thrdLink[title]</a></li>";
+                      echo "<li><a href='$thrdLink[location]'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $thrdLink[title]</a></li>";
 
                     }
                     echo "</ul></li>";
