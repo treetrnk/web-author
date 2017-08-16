@@ -118,7 +118,7 @@
 			ul.navlinks li {
 				margin-left: 10px;
 				position: relative;
-				float: right;
+				float: left;
 				padding: 0 5px;
 			}
 			ul.navlinks li:hover {
@@ -128,6 +128,7 @@
 				display: none;
 				line-height: initial;
 				position: absolute;
+				float: left;
 				left: 0;
 				background-color: #222;
 				-moz-box-shadow:    3px 3px 25px 1px #222;
@@ -141,6 +142,7 @@
 			}
 			ul.navlinks ul li {
 				display: block;
+				float: left;
 				width: 100%;
 				text-align: left;
 				border-top: 1px solid #444;
@@ -275,7 +277,7 @@
 						<ul class="navlinks hidden-sm hidden-xs">
               <?php
 
-                $sql1 = "SELECT * FROM posts WHERE parent = 0 AND time IS NOT NULL ORDER BY sort DESC, title ASC";
+                $sql1 = "SELECT * FROM posts WHERE parent = 0 AND time IS NOT NULL ORDER BY sort ASC, title ASC";
                 if ($result1 = mysqli_query($con, $sql1)) {
                   while ($topLink = mysqli_fetch_array($result1)){
                     echo "<li><a href='?pid=$topLink[id]'>$topLink[title]</a>";

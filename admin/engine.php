@@ -63,17 +63,17 @@
         if (!$row) {
           //echo 'not result <br />';
           $error = "The username could not be found.";
-        }
-
-        if (!password_verify($data['password'], $row['password'])) {
+        } elseif (!password_verify("$_POST[password]", $row['password'])) {
           $error = "Incorrect password.";
-        }
+        } else {
 
-        $_SESSION['userid'] = $row['id'];
-        $_SESSION['username'] = $row['username'];
-        $_SESSION['displayName'] = $row['displayName'];
-        //var_dump($_SESSION);
-        $success = "Logged in successfully.";
+          $_SESSION['userid'] = $row['id'];
+          $_SESSION['username'] = $row['username'];
+          $_SESSION['displayName'] = $row['displayName'];
+          //var_dump($_SESSION);
+          $success = "Logged in successfully.";
+
+        }
 
         break;
 
