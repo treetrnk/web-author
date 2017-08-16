@@ -24,14 +24,18 @@
   }
 
   function rmdirRec($directory) {
-    foreach(glob("{$directory}/*") as $file) {
-        if(is_dir($file)) {
-            rmdirRec($file);
-        } else {
-            unlink($file);
-        }
+    if (file_exists($directory)) {
+      foreach(glob("{$directory}/*") as $file) {
+          if(is_dir($file)) {
+              rmdirRec($file);
+          } else {
+              unlink($file);
+          }
+      }
+      rmdir($directory);
+      return true;
     }
-    rmdir($directory);
+    return false;
   }
 
   if (!empty($_POST['action'])) {
@@ -117,10 +121,10 @@
             $parentloc = $parentdata['location'];
           }
 
-          $toRemove = array("!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "-", "_", "=", "+", "[", "{", "]", "}", ";", ":", "'", '"', ",", "<", ".", ">", "/", "?", "\\", "|", "`", "~");
+          $toRemove = array("!", "&#39;", "@", "#", "$", "%", "^", "&", "*", "(", ")", "-", "_", "=", "+", "[", "{", "]", "}", ";", ":", "'", '"', ",", "<", ".", ">", "/", "?", "\\", "|", "`", "~");
 
           $thisFolder = strRemove($toRemove, $title);
-          $thisFolder = str_replace(" ", "-", $title);
+          $thisFolder = strtolower(str_replace(" ", "-", $thisFolder));
           $location = "$parentloc$thisFolder/";
 
           $extrasql = "";
@@ -170,7 +174,9 @@
               $oldLoc = mysqli_fetch_array(mysqli_query($con, $oldLocSql));
 
               if ($location != $oldLoc['location']) {
-                rmdirRec($oldLoc['location']);
+                if (file_exists($oldLoc['location'])) {
+                  //rmdirRec($oldLoc['location']);
+                }
               }
 
               $sql = "
@@ -189,6 +195,7 @@
               $pid = $_POST['id'];
             }
 
+            $error = $location;
             mkdir($location, true) or die("Unable to create directory");             
             $myfile = fopen("index.php", "w") or die("Unable to write file");
             $txt = '<?php $pid=' . $pid . '; include "/index.php"; ?>';

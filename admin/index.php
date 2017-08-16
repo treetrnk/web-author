@@ -77,8 +77,6 @@
 	</head>
 	<body>
 
-    <?php var_dump($_SESSION) ?>
-
     <?php if (!empty($success)) { ?>
 		<div class="container">
 			<div class="alert alert-success" role="alert">
@@ -144,7 +142,6 @@
     <script src="bootstrap-markdown/js/to-markdown.js"></script>
     <script src="bootstrap-markdown/js/bootstrap-markdown.js"></script>
     <script src="//rawgit.com/jeresig/jquery.hotkeys/master/jquery.hotkeys.js"></script>
-    <script src="bootstrap-markdown/js/main.js"></script>
   </body>
 </html>
 
