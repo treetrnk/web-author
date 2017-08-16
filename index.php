@@ -267,7 +267,7 @@
 			<div class="container">
 				<div class="row">
 					<div class="col-md-4 col-sm-10 col-xs-10 site-title">
-						<a href="./">
+						<a href="/">
 							<span class="small">The Writings Of</span>
 							<h2>Nathan Hare</h2>
 						</a>
