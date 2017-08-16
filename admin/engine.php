@@ -196,7 +196,7 @@
             }
 
             $error = $location;
-            mkdir($location, true) or die("Unable to create directory");             
+            mkdir("/srv/http" . $location, 0775, true) or die("Unable to create directory");             
             $myfile = fopen("index.php", "w") or die("Unable to write file");
             $txt = '<?php $pid=' . $pid . '; include "/index.php"; ?>';
             fwrite($myfile, $txt);
