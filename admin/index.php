@@ -20,19 +20,42 @@
 		$page = $_GET['page'];
 	}
 
+  $active = [
+    "posts" => "",
+    "navigation" => "",
+  ];
+
+  if ($page == 'posts') {
+    $active['posts'] = "active";
+  } elseif ($page == 'navigation') {
+    $active['navigation'] = "active";
+  }
+
+  $postsArr = array();
+  $sql = "SELECT * FROM posts";
+  if ($result = mysqli_query($con, $sql)) {
+    while ($row = mysqli_fetch_array($result)) {
+      $postsArr[$row['id']] = $row;
+    }
+  }
+
+  $pgTitle = ucfirst($page);
+
 ?>
 
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Admin - The Writings of Nathan Hare</title>
+  <title><?=$pgTitle;?> Admin - Nathan Hare</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link rel="shortcut icon" href="/images/favicon-admin.png" type="image/x-icon">
+		<link href="/css/bootstrap.min.css" rel="stylesheet" media="screen">
+		<!--<link href="/admin/css/bootstrap-cyborg.min.css" rel="stylesheet" media="screen">-->
 		<!---
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 		--->
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" media="screen" href="bootstrap-markdown/css/bootstrap-markdown.min.css">
+    <!---<script src="https://use.fontawesome.com/0dabb168cf.js"></script>--->
 		<style>
 			/*
 			header {
@@ -63,6 +86,7 @@
 			}
 			body {
 				padding-top: 75px;
+				padding-bottom: 25px;
 			}
 			.logout {
 				line-height: 50px;
@@ -71,7 +95,11 @@
 				margin-left: 10px;
 			}
       .form-actions {
-        margin: 25px 0;
+        margin: 25px 0 0 0;
+      }
+      textarea.md-input {
+        font-size: 1.1em;
+        font-family: inherit;
       }
 		</style>
 	</head>
@@ -83,6 +111,16 @@
 				<i class="glyphicon glyphicon-ok-sign"></i>
 				<b>Success!</b>
 				<?=$success;?>
+			</div>
+		</div>
+		<?php } ?>
+
+    <?php if (!empty($debug)) { ?>
+		<div class="container">
+			<div class="alert alert-info" role="alert">
+				<i class="glyphicon glyphicon-info-sign"></i>
+				<b>Debug: </b>
+				<?=$debug;?>
 			</div>
 		</div>
 		<?php } ?>
@@ -117,12 +155,15 @@
 				</div>
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 					<ul class="nav navbar-nav">
-						<li class="active"><a href="#">Posts <span class="sr-only">(current)</span></a></li>
-						<li><a href="#">Navigation</a></li>
+          <li class="<?=$active['posts'];?>"><a href="?page=posts">Posts <span class="sr-only">(current)</span></a></li>
+						<li class="<?=$active['navigation'];?>"><a href="/admin/?page=navigation">Navigation</a></li>
 						<li class="disabled"><a href="#">Users</a></li>
 					</ul>
 					<div class="nav navbar-nav navbar-right logout">
-						<a href="/admin/?action=logout" class="btn btn-default" id="logout"><i class="glyphicon glyphicon-user"></i><span clas="hidden-xs"> Logout</span></a>
+            <form action="/admin/" method="post" class="form">
+              <input type="hidden" name="action" value="logout" />
+              <button type="submit" class="btn btn-default" id="logout"><i class="glyphicon glyphicon-user"></i><span clas="hidden-xs"> Logout</span></a>
+            </form>
 					</div>
 				</div>
 			</div>
@@ -142,6 +183,19 @@
     <script src="bootstrap-markdown/js/to-markdown.js"></script>
     <script src="bootstrap-markdown/js/bootstrap-markdown.js"></script>
     <script src="//rawgit.com/jeresig/jquery.hotkeys/master/jquery.hotkeys.js"></script>
+    <script>
+      $(document).ready(function() {
+
+        var words = $('#md-input').val().match(/[a-zA-Z.0-9/-]+/g).length;
+        $('#display_count').text("("+words+" words)");
+        
+        $("#md-input").on('keyup', function(e) {
+          var words = this.value.match(/[a-zA-Z.0-9/-]+/g).length;
+          $('#display_count').text("("+words+" words)");
+        });
+
+      });
+    </script>
   </body>
 </html>
 

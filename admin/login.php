@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col-sm-4 col-sm-offset-4 col-xs-6 col-xs-offset-3">
+  <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-10 col-xs-offset-1">
 
     <br /><br />    
 
@@ -29,8 +29,8 @@
           <div class="form-actions">
             <div class="row">
               <div class="col-xs-12">
-                <button type="submit" class="btn btn-primary">Log In</button>
-                <a href="../" class="btn btn-default">Cancel</a>
+                <button type="submit" class="btn btn-primary btn-block">Log In</button>
+                <a href="../" class="btn btn-default btn-block">Cancel</a>
               </div>
             </div>
           </div>

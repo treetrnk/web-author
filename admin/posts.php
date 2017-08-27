@@ -24,23 +24,36 @@
       <table class="table table-hover table-responsive">
         <thead>
           <tr>
+            <th>Actions</th>
             <th>Title</th>
+            <th>Location</th>
             <th>Type</th>
-            <th></th>
             <th width="175">Posted</th>
             <th width="50"></th>
           </tr>
         </thead>
         <tbody>
       <?php
-        if ($result = mysqli_query($con, "SELECT * FROM posts")) {
+        if ($result = mysqli_query($con, "SELECT * FROM posts ORDER BY SUBSTRING(location, 1, LENGTH(location) - LENGTH(SUBSTRING_INDEX(REVERSE(location), '/', 2))) ASC, sort ASC, time ASC, title ASC")) {
           while ($row = mysqli_fetch_assoc($result)) {
-            if (!empty($row['time'])) { $time = date_format(date_create($row['time']), "D M d, Y - h:i:s A"); }
+            $urlcode = "";
+            $class = "";
+            if (!empty($row['time'])) { 
+              $time = date_format(date_create($row['time']), "D M d, Y - h:i:s A");
+            }
+            if (empty($row['time'] || strtotime($row['time']) > strtotime(date("Y-m-d H:i:s")))) {
+              $urlcode = "?preview=" . urlencode(password_hash($row['title'], PASSWORD_DEFAULT));
+              $class = "warning";
+            }
             echo "
-              <tr>
-                <th><a href='?page=edit&pid=$row[id]'>$row[title]</a></th>
+              <tr class='$class'>
+                <td>
+                  <a href='?page=edit&pid=$row[id]' class='btn btn-default btn-sm'><i class='glyphicon glyphicon-pencil' title='Edit'></i></a>
+                  <a href='$row[location]$urlcode' class='btn btn-default btn-sm' target='_blank' title='View'><i class='glyphicon glyphicon-eye-open'></i></a>
+                </td>
+                <th>$row[title]</th>
+                <td>$row[location]</td>
                 <td>" . ucfirst($row['type']) . "</td>
-                <td><a href='../?pid=$row[id]' target='_blank'><i class='glyphicon glyphicon-eye-open'></i> View Post</a></td>
                 <td>$row[time]</td>
                 <td>
                   <form action='index.php?page=posts' method='post'>

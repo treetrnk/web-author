@@ -42,9 +42,7 @@
 
   if (!empty($_POST['action'])) {
     $action = $_POST['action'];
-  } elseif (!empty($_GET['action'])) {
-    $action = $_GET['action'];
-  }
+  } 
 
   $data = $_POST;
 
@@ -136,7 +134,7 @@
           if (mysqli_num_rows($uniqueResult = mysqli_query($con, $uniqueLocSql)) == 0) {
 
             if ($action == 'addPost') {
-              if (!empty($_POST['publish'])) {
+              if ($_POST['publish'] == 'y') {
                 $publish1 = ", time";
                 $publish2 = ", CURRENT_TIMESTAMP";
               }
@@ -151,7 +149,8 @@
                   banner,
                   tags,
                   type,
-                  location$publish1
+                  location,
+                  sort$publish1
                 ) VALUES (
                   '$title',
                   '$body',
@@ -160,7 +159,8 @@
                   '$banner',
                   '$tags',
                   '$type',
-                  '$location'$publish2
+                  '$location',
+                  '99'$publish2
                 )";
 
               $pid = mysqli_insert_id($con);
@@ -197,7 +197,7 @@
               $pid = $_POST['id'];
             }
 
-            $error = $location;
+            //$error = $location;
             if (!file_exists($locprefix.$location)) {
               mkdir($locprefix.$location, 0775, true) or die("Unable to create directory");             
             }
@@ -234,6 +234,24 @@
         }
 
         break; 
+
+      case 'sort': //////////////////////////////////////////////////////
+
+        foreach($_POST as $key => $value) {
+          if (is_int($key)) {
+            if (!is_numeric($value) || !is_int($value * 1) || $value < -1 || $value > 100) {
+              if (!empty($value)) {
+                $error = "The sort order must be a number between 0 and 100";
+              }
+              $value = 99;
+            }
+            $sql = "UPDATE posts SET sort = $value WHERE id = $key";
+            mysqli_query($con, $sql);
+            $success = "Sort order has been successfully updated.";
+          }
+        }
+
+        break;
 
     }
 

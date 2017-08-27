@@ -15,6 +15,7 @@
   $tags = "";
   $type = "";
   $body = "";
+  $location = "";
 
   if ($action == 'Add') {
     if (!empty($_POST['title'])){        $title        = $_POST['title']; }
@@ -23,6 +24,8 @@
     if (!empty($_POST['tags'])){         $tags         = $_POST['tags']; }
     if (!empty($_POST['type'])){         $type         = $_POST['type']; }
     if (!empty($_POST['body'])){         $body         = $_POST['body']; }
+    if (!empty($_POST['location'])){     $location     = $_POST['location']; }
+    $actionPage = "/admin/";
 
 
   } elseif ($action == "Edit") {
@@ -35,6 +38,8 @@
     if (!empty($row['tags'])){         $tags         = $row['tags']; }
     if (!empty($row['type'])){         $type         = $row['type']; }
     if (!empty($row['body'])){         $body         = $row['body']; }
+    if (!empty($row['location'])){     $location     = $row['location']; }
+    $actionPage = "/admin/?page=edit&pid=$_GET[pid]";
   }
 
   switch ($type) {
@@ -57,11 +62,21 @@
 
   echo "
     <h1>$action Post</h1>
-    <form class='form' action='index.php' method='post'>
+    <form class='form' action='$actionPage' method='post'>
       <input type='hidden' name='action' value='$engAction' />
   ";
   
-  if ($edit) { echo "<input type='hidden' name='id' value='$_GET[pid]' />"; }
+  if ($edit) { 
+    echo "<input type='hidden' name='id' value='$_GET[pid]' />"; 
+    $urlcode = "";
+    if (!empty($row['time'])) { 
+      $time = date_format(date_create($row['time']), "D M d, Y - h:i:s A");
+    }
+    if (empty($row['time'] || strtotime($row['time']) > strtotime(date("Y-m-d H:i:s")))) {
+      $urlcode = "?preview=" . urlencode(password_hash($row['title'], PASSWORD_DEFAULT));
+    }
+    echo "<p><a href='$row[location]$urlcode' target='_blank'>View Post</a></p>";
+  }
 
   echo "
       <div class='form-body'>
@@ -77,7 +92,7 @@
             <select name='parent' class='form-control' />
               <option value=''>(none)</option>";
 
-              if ($result = mysqli_query($con, "SELECT * FROM posts")) {
+              if ($result = mysqli_query($con, "SELECT * FROM posts WHERE (length(location)-length(replace(location, '/', ''))) < 4")) {
                 while ($curpost = mysqli_fetch_assoc($result)) {
                   if (!($edit && $curpost['id'] == $_GET['pid'])) {
                     $selected = "";
@@ -115,8 +130,9 @@
         </div>
         <div class='row'>
           <div class='col-xs-12'>
+            <span class='pull-right text-muted' id='display_count'> </span>
             <label class='control-label'>Body</label>
-            <textarea name='body' class='form-control' data-provide='markdown' rows='15'>$body</textarea>
+            <textarea name='body' class='form-control' id='md-input' data-provide='markdown' rows='15'>$body</textarea>
           </div>
         </div>
       </div>

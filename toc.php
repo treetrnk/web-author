@@ -15,7 +15,7 @@
       if ($row['id'] == $thisPost['id']) {
         echo "<li><b>$row[title]</b></li>";
       } else {
-        echo "<li><a href='?pid=$row[id]'>$row[title]</a></li>";
+        echo "<li><a href='$row[location]'>$row[title]</a></li>";
       }
     }
   }
