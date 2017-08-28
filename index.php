@@ -17,11 +17,55 @@
     die();
   }
   
+  // Create Array of posts
   $postsArr = array();
   $sql = "SELECT * FROM posts";
   if ($result = mysqli_query($con, $sql)) {
     while ($row = mysqli_fetch_array($result)) {
       $postsArr[$row['id']] = $row;
+    }
+  }
+
+  //Get children of provided parent id
+  function getChildren($parentid, $con) {
+    $sql = "SELECT * FROM posts 
+      WHERE parent = $parentid 
+        AND time < CURRENT_TIMESTAMP 
+      ORDER BY sort ASC, 
+        time ASC, 
+        title ASC";
+    if ($result = mysqli_query($con, $sql)) {
+      if (mysqli_num_rows($result) > 0) {
+        return $result;
+      }
+    }
+    return "";
+  }
+
+  //Create array of navigation links
+  $navArr = [];
+  $topLinks = getChildren(0, $con);
+  if (!empty($topLinks)) {
+    while ($topLink = mysqli_fetch_array($topLinks)) {
+
+      $navArr["$topLink[id]"] = $topLink;
+      $midLinks = getChildren($topLink['id'], $con);
+      if (!empty($midLinks)) {
+        while ($midLink = mysqli_fetch_array($midLinks)) {
+
+          $navArr["$topLink[id]"]["children"]["$midLink[id]"] = $midLink;
+          $btmLinks = getChildren($midLink['id'], $con);
+          if (!empty($btmLinks)) {
+            while ($btmLink = mysqli_fetch_array($btmLinks)) {
+
+              $navArr["$topLink[id]"]["children"]["$midLink[id]"]["children"]["$btmLink[id]"] = $btmLink;
+
+            }
+          }
+
+        }
+      }
+
     }
   }
 
@@ -225,44 +269,34 @@
               <li><a href="#" data-toggle="modal" data-target="#searchMod" id="searchbtn"> &nbsp;&nbsp; <i class="glyphicon glyphicon-search"></i> &nbsp;&nbsp; </a></li>
               <?php
 
-                $sql1 = "SELECT * FROM posts WHERE parent = 0 AND time IS NOT NULL ORDER BY sort ASC, time ASC, title ASC";
-                if ($result1 = mysqli_query($con, $sql1)) {
-                  while ($topLink = mysqli_fetch_array($result1)){
-                    echo "<li><a href='$topLink[location]'>$topLink[title]";
+                foreach ($navArr as $topLink){
+                  echo "<li><a href='$topLink[location]'>$topLink[title]";
 
-                    $sql2 = "SELECT * FROM posts WHERE parent = '$topLink[id]' AND time IS NOT NULL ORDER BY sort ASC, time ASC, title ASC";
-                    if ($result2 = mysqli_query($con, $sql2)) {
-                      if (mysqli_num_rows($result2) > 0) {
-                        echo " <i class='glyphicon glyphicon-menu-down dropdown'></i></a><ul>";
+                  if (array_key_exists("children", $topLink) && !empty($topLink["children"])) {
+                    echo " <i class='glyphicon glyphicon-menu-down dropdown'></i></a><ul>";
+
+                    foreach ($topLink["children"] as $midLink) {
+                      echo "<li><a href='$midLink[location]'>$midLink[title]";
+
+                      if (array_key_exists("children", $midLink) && !empty($midLink["children"])) {
+                        echo " <i class='glyphicon glyphicon-menu-right dropdown'></i></a><ul>";
+
+                        foreach ($midLink["children"] as $btmLink) {
+                          echo "<li><a href='$btmLink[location]'>$btmLink[title]</a></li>";
+                        }
+
                       } else {
                         echo "</a><ul>";
                       }
-                      while ($sndLink = mysqli_fetch_array($result2)) {
-                        echo "<li><a href='$sndLink[location]'>$sndLink[title]";
-
-                        $sql3 = "SELECT * FROM posts WHERE parent = '$sndLink[id]' AND time IS NOT NULL ORDER BY sort ASC, time ASC, title ASC";
-                        if ($result3 = mysqli_query($con, $sql3)) {
-                          if (mysqli_num_rows($result3) > 0) {
-                            echo " <i class='glyphicon glyphicon-menu-right dropdown'></i></a><ul>";
-                          } else {
-                            echo "</a><ul>";
-                          }
-                          while ($thrdLink = mysqli_fetch_array($result3)) {
-                            echo "<li><a href='$thrdLink[location]'>$thrdLink[title]</a></li>";
-                          }
-                          echo "</ul>";
-                        }
-
-                        echo "</a></li>";  
-
-                      }
-                      echo "</ul>";
-
+                      echo "</ul></li>";  
                     }
 
-                    echo "</a></li>";  
+                  } else {
+                    echo "</a><ul>";
                   }
+                  echo "</ul></li>";  
                 }
+
               ?>
 
             </ul>
@@ -270,7 +304,6 @@
 				</div>
 			</div>
 		</header>
-
     <nav class="toggle-nav" id="toggle-nav">
       <form action="/search/" method="get"> 
         <div class="row">
@@ -286,37 +319,29 @@
       </form>
 			<ul>
         <?php
-          $sql1 = "SELECT * FROM posts WHERE parent = 0 AND time IS NOT NULL ORDER BY sort ASC, time ASC, title ASC";
-          if ($result1 = mysqli_query($con, $sql1)) {
-            while ($topLink = mysqli_fetch_array($result1)){
+            foreach ($navArr as $topLink){
               echo "<li><a href='$topLink[location]'>" . strtoupper($topLink['title']);
 
-              $sql2 = "SELECT * FROM posts WHERE parent = '$topLink[id]' AND time IS NOT NULL ORDER BY sort ASC, time ASC, title ASC";
-              if ($result2 = mysqli_query($con, $sql2)) {
-                if (mysqli_num_rows($result2) > 0) {echo " <i class='glyphicon glyphicon-menu-down dropdown'></i>";}
-                echo "</a><ul>";
-                while ($sndLink = mysqli_fetch_array($result2)) {
-                  echo "<li><a href='$sndLink[location]'>&nbsp;&nbsp;&nbsp;&nbsp; $sndLink[title]";
+              if (array_key_exists("children", $topLink) && !empty($topLink["children"])) {
+                echo " <i class='glyphicon glyphicon-menu-down dropdown'></i></a><ul>";
+                foreach ($topLink["children"] as $midLink) {
+                  echo "<li><a href='$midLink[location]'>&nbsp;&nbsp;&nbsp;&nbsp; $midLink[title]";
 
-                  $sql3 = "SELECT * FROM posts WHERE parent = '$sndLink[id]' AND time IS NOT NULL ORDER BY sort ASC, time ASC, title ASC";
-                  if ($result3 = mysqli_query($con, $sql3)) {
-                    if (mysqli_num_rows($result3) > 0) {echo " <i class='glyphicon glyphicon-menu-down dropdown'></i>";}
-                    echo "</a><ul>";
-                    while ($thrdLink = mysqli_fetch_array($result3)) {
-                      echo "<li><a href='$thrdLink[location]'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $thrdLink[title]</a></li>";
+                  if (array_key_exists("children", $midLink) && !empty($midLink["children"])) {
+                    echo " <i class='glyphicon glyphicon-menu-down dropdown'></i></a><ul>";
+                    foreach ($midLink["children"] as $btmLink) {
+                      echo "<li><a href='$btmLink[location]'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $btmLink[title]</a></li>";
 
                     }
                     echo "</ul></li>";
-                  }
+                  } else { echo "</a></li>"; }
 
                 }
                 echo "</ul></li>";
-              } else { echo "</a>"; }
+              } else { echo "</a></li>"; }
 
             }
-          } else { echo "</a></li>"; }
-                
-          echo "</li>";
+          echo "</a></li>";
         ?>
 
 			</ul>
