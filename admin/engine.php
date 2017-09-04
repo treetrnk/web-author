@@ -163,8 +163,6 @@
                   '99'$publish2
                 )";
 
-              $pid = mysqli_insert_id($con);
-
             } else {
               if ($_POST['publish'] == 'y') {
                 $publish1 = ", time = CURRENT_TIMESTAMP";
@@ -197,16 +195,21 @@
               $pid = $_POST['id'];
             }
 
-            //$error = $location;
-            if (!file_exists($locprefix.$location)) {
-              mkdir($locprefix.$location, 0775, true) or die("Unable to create directory");             
-            }
-            $myfile = fopen($locprefix.$location."index.php", "w") or die("Unable to write file");
-            $txt = '<?php $pid=' . $pid . "; include '$locprefix/index.php'; ?>";
-            fwrite($myfile, $txt);
-            fclose($myfile);
-
             if ($result = mysqli_query($con, $sql)) {
+
+              if ($action == "addPost") {
+                $pid = mysqli_insert_id($con);
+              }
+
+              //$error = $location;
+              if (!file_exists($locprefix.$location)) {
+                mkdir($locprefix.$location, 0775, true) or die("Unable to create directory");             
+              }
+              $myfile = fopen($locprefix.$location."index.php", "w") or die("Unable to write file");
+              $txt = '<?php $pid=' . $pid . "; include '$locprefix/index.php'; ?>";
+              fwrite($myfile, $txt);
+              fclose($myfile);
+
               $success = "Successfully saved post.";
               $page = "posts";
             } else { 

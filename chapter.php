@@ -3,13 +3,22 @@
     
     <h1><?=$thisPost['title'];?></h1>
     <p class="pull-right text-muted" id="theme-select">
-      <small class="hidden-xs">Theme:</small>
+      <small>Theme:</small>
       <small>
-        <a href="?theme=light" id="light-theme" title="Light Theme"> </a>
-        <a href="?theme=dark" id="dark-theme" title="Dark Theme"> </a>
+        <a href="?theme=light" id="light-theme" title="Light Theme">
+          <img src="/images/light-theme.png" />
+        </a>
+        <a href="?theme=dark" id="dark-theme" title="Dark Theme">
+          <img src="/images/dark-theme.png" />
+        </a>
       </small>
-    </p>
+    </p><br />
     <p class="text-muted"><small><?=$date;?></small></p>
+    <nav class="clearfix">
+      <ul class="pager">
+        <?="$prevChapLi $nextChapLi";?> 
+      </ul>
+    </nav>
     <div class="content">
       <?=$PD->text($thisPost['body']);?>
     </div>
@@ -17,6 +26,7 @@
     <br /><br />
     <div class="row">
       <div class="col-sm-6 col-xs-12">
+        <p>
         <?php
           if (!empty($thisPost['tags'])) {
             echo "<i class='glyphicon glyphicon-tag'></i> ";
@@ -26,12 +36,13 @@
             }
           }
         ?>
+        </p>
       </div>
       <div class="col-sm-6 col-xs-12 text-right share-btns">
         <small class="text-muted">Share:</small>
         <?=$sharebtns;?>
       </div>
-    </div><br />
+    </div>
     <nav aria-label="...">
       <ul class="pager">
         <?="$prevChapLi $nextChapLi";?> 

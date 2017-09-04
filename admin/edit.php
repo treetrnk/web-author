@@ -107,14 +107,14 @@
           </div>
           <div class='col-sm-6 col-sm-12'>
             <label class='control-label'>Banner Image </label>
-            <span class='badge' title='Defaults to parent&#39;s banner image if left blank.'>?</span>
+            <a href='#' class='badge' data-toggle='tooltip' title='Defaults to parent&#39;s banner image if left blank.'>?</a>
             <input type='text' name='banner' value='$banner' placeholder='http://example.com/sample.png' class='form-control' />
           </div>
         </div>
         <div class='row'>
           <div class='col-sm-6 col-xs-12'>
             <label class='control-label'>Tags</label>
-            <span class='badge' title='Comma separated list (i.e. - sports,hockey,canada). '>?</span>
+            <a href='#' class='badge'data-toggle='tooltip'  title='Comma separated list (i.e. - sports,hockey,canada). '>?</a>
             <input type='text' name='tags' value='$tags' class='form-control' />
           </div>
           <div class='col-sm-6 col-xs-12'>

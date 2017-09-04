@@ -4,9 +4,12 @@
     <p class="pull-right text-muted" id="theme-select">
       <small class="hidden-xs">Theme:</small>
       <small>
-
-      <a href="<?=$urlkeyword;?>&theme=light" id="light-theme" title="Light Theme"> </a>
-        <a href="<?=$urlkeyword;?>&theme=dark" id="dark-theme" title="Dark Theme"> </a>
+        <a href="<?=$urlkeyword;?>&theme=light" id="light-theme" title="Light Theme">
+          <img src="/images/light-theme.png" />
+        </a>
+        <a href="<?=$urlkeyword;?>&theme=dark" id="dark-theme" title="Dark Theme">
+          <img src="/images/dark-theme.png" />
+        </a>
       </small>
     </p>
     <?php

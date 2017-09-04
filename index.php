@@ -19,7 +19,7 @@
   
   // Create Array of posts
   $postsArr = array();
-  $sql = "SELECT * FROM posts";
+  $sql = "SELECT * FROM posts ORDER BY id";
   if ($result = mysqli_query($con, $sql)) {
     while ($row = mysqli_fetch_array($result)) {
       $postsArr[$row['id']] = $row;
@@ -105,6 +105,7 @@
   if ($search) {
 
     $keyword = "";
+    $urlkeyword = "?a=a";
     if (!empty($_GET['s'])) { $s = $_GET['s']; $keyword = $s; $urlkeyword = "?s=$s"; }
     if (!empty($_GET['tag'])) { $tag = $_GET['tag']; $keyword = $tag; $urlkeyword = "?tag=$tag"; }
     
@@ -133,17 +134,15 @@
     $parentli = "";
     $topparentli = "";
     if ($thisPost['parent'] != 0) {
-      $sql = "SELECT * FROM posts WHERE id = $thisPost[parent] LIMIT 1";
-      $parent = mysqli_fetch_array(mysqli_query($con, $sql));
+      $parent = $postsArr[$thisPost['parent']];
       $parentli = "<li><a href='$parent[location]'>$parent[title]</a></li>";
       if (!empty($parent['parent']) && $parent['parent'] != 0) {
-        $sql2 = "SELECT * FROM posts WHERE id = $parent[parent] LIMIT 1";
-        $topparent = mysqli_fetch_array(mysqli_query($con, $sql2));
+        $topparent = $postsArr[$parent['parent']];
         $topparentli = "<li><a href='$topparent[location]'>$topparent[title]</a></li>";
       }
     }
 
-    $banner = "http://i.imgur.com/wm1M89Q.jpg";
+    $banner = "/images/writing-banner.jpg";
     if (!empty($thisPost['banner'])) {
       $banner = $thisPost['banner'];
     } elseif (!empty($parent['banner'])) {
@@ -169,11 +168,11 @@
       ORDER BY sort ASC, time ASC
       LIMIT 1";
     $nextChapter = "";
-    $nextChapLi = "<li class='next disabled'><a href='#'>Next Chapter <span aria-hidden='true'>&rarr;</span></a></li>";
+    $nextChapLi = "<li class='next disabled'><a href='#'><small>Next Chapter <span aria-hidden='true'>&rarr;</span></small></a></li>";
     if ($nextresult = mysqli_query($con, $nextsql)) {
       $nextChapter = mysqli_fetch_array($nextresult);
       if (!empty($nextChapter)) {
-        $nextChapLi = "<li class='next'><a href='$nextChapter[location]'>Next Chapter <span aria-hidden='true'>&rarr;</span></a></li>";
+        $nextChapLi = "<li class='next'><a href='$nextChapter[location]'><small>Next Chapter <span aria-hidden='true'>&rarr;</span></small></a></li>";
       }
     }
     // Previous Chapter
@@ -184,11 +183,11 @@
       ORDER BY sort DESC, time DESC
       LIMIT 1";
     $prevChapter = "";
-    $prevChapLi = "<li class='previous disabled'><a href='#'><span aria-hidden='true'>&larr;</span> Previous Chapter</a></li>";
+    $prevChapLi = "<li class='previous disabled'><a href='#'><small><span aria-hidden='true'>&larr;</span> Previous Chapter</small></a></li>";
     if ($prevresult = mysqli_query($con, $prevsql)) {
       $prevChapter = mysqli_fetch_array($prevresult);
       if (mysqli_num_rows($prevresult)) {
-        $prevChapLi = "<li class='previous'><a href='$prevChapter[location]'><span aria-hidden='true'>&larr;</span> Previous Chapter</a></li>";
+        $prevChapLi = "<li class='previous'><a href='$prevChapter[location]'><small><span aria-hidden='true'>&larr;</span> Previous Chapter</a></small></li>";
       }
     }
 
@@ -244,9 +243,6 @@
 
     <link rel="shortcut icon" href="/images/favicon2.png" type="image/x-icon">
 		<link href="/css/bootstrap.min.css" rel="stylesheet" media="screen">
-		<link rel="stylesheet" href="/css/bootstrap-theme.min.css">
-		<!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <link href="https://fonts.googleapis.com/css?family=Marcellus+SC|Montserrat:900|Open+Sans|Passion+One" rel="stylesheet">-->
     <!---<script src="https://use.fontawesome.com/0dabb168cf.js"></script>--->
 
     <?php include "css/css.php" ?>

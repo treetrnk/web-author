@@ -1,18 +1,18 @@
 		<style>
       @font-face {
-        font-family: 'Open Sans';
+        font-family: "Open Sans";
         src: url(/css/fonts/OpenSans-Regular.ttf);
       }
       @font-face {
-        font-family: 'Montserrat';
+        font-family: "Montserrat";
         src: url(/css/fonts/Montserrat-Regular.ttf);
       }
       @font-face {
-        font-family: 'Montserrat SemiBold';
+        font-family: "Montserrat SemiBold";
         src: url(/css/fonts/Montserrat-SemiBold.ttf);
       }
       @font-face {
-        font-family: 'Yesteryear';
+        font-family: "Yesteryear";
         src: url(/css/fonts/Yesteryear-Regular.ttf);
       }
 			header {
@@ -38,7 +38,7 @@
 			}
 			div.site-title a h2 {
 				margin: 0;
-        font-family: 'Yesteryear', cursive;
+        font-family: "Yesteryear", cursive;
 				text-transform: none;
         font-weight: normal;
         font-size: 1.8em;
@@ -60,7 +60,7 @@
 			}
 			ul.navlinks a {
 				display: block;
-        font-family: 'Montserrat', sans-serif;
+        font-family: "Montserrat", Arial, sans-serif;
 				line-height: 68px;
 			}
 			ul.navlinks li {
@@ -98,7 +98,7 @@
 			}
       ul.navlinks ul a {
 				text-transform: none;
-        font-family: 'Open Sans', sans-serif;
+        font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 				line-height: normal;
       }
 			ul.navlinks ul ul {
@@ -144,7 +144,7 @@
 				padding: 0 10px;
 				color: #dddddd;
 				font-size: 14px;
-        font-family: 'Motserrat', sans-serif;
+        font-family: "Montserrat", Arial, sans-serif;
 			}
 			#toggle-nav a:hover {
 				text-decoration: none;
@@ -176,11 +176,11 @@
         background-color: <?=$theme['bodybg'];?>;
         color: <?=$theme['color'];?>;
 				font-size: 175%;
-        font-family: 'Open Sans', sans-serif;
+        font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
         padding-top: 50px;
 			}
       h1, h2, h3, h4 {
-        font-family: 'Montserrat SemiBold', sans-serif;
+        font-family: "Montserrat SemiBold", "Arial Black", Arial, sans-serif;
         text-transform: uppercase;
       }
 			div.jumbotron {
@@ -194,7 +194,7 @@
 				background: rgba(0, 0, 0, .4);
 */
 				padding: 10px;
-        font-family: 'Montserrat SemiBold', sans-serif;
+        font-family: "Montserrat SemiBold", "Arial Black", Arial, sans-serif;
 				border-radius: 5px;
         text-transform: uppercase;
 			}
@@ -225,26 +225,29 @@
         margin: 0 0 0 10px;
       }
       #theme-select a {
-        padding: 0 11px 0 11px;
+        text-decoration: none;
+      }
+      #theme-select a img {
         margin-left: 5px;
         border-radius: 100px;
         -moz-box-shadow:    3px 3px 3px 1px rgba(0,0,0, .2);
         -webkit-box-shadow: 3px 3px 3px 1px rgba(0,0,0, .2);
         box-shadow:         3px 3px 3px 1px rgba(0,0,0, .2);
         cursor: pointer;
-        font-size: 15px !important;
+        width: 24px;
+        height: 24px;
      }
-      #light-theme {
+      #light-theme img {
         background-color: #ffffff;
         border: 2px solid #999999;
       }
-      #dark-theme {
+      #dark-theme img {
         background-color: #222222;
         border: 2px solid #eeeeee;
       }
       div.content p {
-          line-height: 30px;
-          margin-bottom: 25px;
+          line-height: 1.6em;
+          margin-bottom: 1.25em;
       }
       @media only screen and (max-width: 400px) {
         section.content-wrapper {
@@ -266,6 +269,7 @@
       }
       ul.pager li a {
         <?=$theme['pager'];?>
+        line-height: 17px;
       }
 			footer {
 				margin: 10px auto 50px auto;

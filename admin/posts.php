@@ -1,19 +1,24 @@
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Confirm Delete</h4>
-      </div>
-      <div class="modal-body">
-        Are you sure you want to delete this post?
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-danger">Delete</button>
+<!-- Modal -->
+<div class="modal fade" id="delMod" tabindex="-1" role="dialog" aria-labelledby="delModLabel">
+  <form action="/admin/" method="post">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h3 class="modal-title" id="delModLabel">Delete Post?</h3>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" name="action" value="deletePost" />
+          <input type="hidden" name="id" value="" />
+          Are you sure you want to delete the post <b id="post-title"></b> from <code id="post-location"></code>?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-danger">Delete</button>
+        </div>
       </div>
     </div>
-  </div>
+  </form>
 </div>
 
 <div class="row">
@@ -56,11 +61,7 @@
                 <td>" . ucfirst($row['type']) . "</td>
                 <td>$row[time]</td>
                 <td>
-                  <form action='index.php?page=posts' method='post'>
-                    <input type='hidden' name='action' value='deletePost' />
-                    <input type='hidden' name='id' value='$row[id]' />
-                    <button type='submit' class='btn btn-xs btn-danger'><i class='glyphicon glyphicon-remove'></i></button>
-                  </form>
+                  <button type='button' class='btn btn-xs btn-danger' data-toggle='modal' data-target='#delMod' data-id='$row[id]' data-title='$row[title]' data-location='$row[location]'><i class='glyphicon glyphicon-remove'></i></button>
                 </td>
               </tr>
             ";
@@ -73,3 +74,18 @@
 
   </div>
 </div>
+
+<script>
+  $(document).ready(function() {
+   $("#delMod").on('show.bs.modal', function(e) {
+      var button = $(e.relatedTarget);
+      var postTitle = button.data('title');
+      var postID = button.data('id');
+      var postLocation = button.data('location');
+      var modal = $(this);
+      modal.find('#post-title').text(postTitle);
+      modal.find('#post-location').text(postLocation);
+      modal.find('input[name="id"]').val(postID);
+    }); 
+  });
+</script>
