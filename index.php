@@ -192,10 +192,10 @@
     }
 
     $sharebtns = "
-      <a href='https://plus.google.com/share?url=$approot$thisPost[location]' target='_blank'><img src='http://rpg.nathanhare.net/images/googleplus-share.png' /></a> 
-      <a href='https://facebook.com/sharer.php?u=$approot$thisPost[location]' target='_blank'><img src='http://rpg.nathanhare.net/images/facebook-share.png' /></a> 
-      <a href='https://www.reddit.com/submit?url=$approot$thisPost[location]' target='_blank'><img src='http://rpg.nathanhare.net/images/reddit-share.png' /></a> 
-      <a href='https://twitter.com/share?url=$approot$thisPost[location]' target='_blank'><img src='http://rpg.nathanhare.net/images/twitter-share.png' /></a> 
+      <a href='https://plus.google.com/share?url=$approot$thisPost[location]' target='_blank'><img src='/images/googleplus-share.png' /></a> 
+      <a href='https://facebook.com/sharer.php?u=$approot$thisPost[location]' target='_blank'><img src='/images/facebook-share.png' /></a> 
+      <a href='https://www.reddit.com/submit?url=$approot$thisPost[location]' target='_blank'><img src='/images/reddit-share.png' /></a> 
+      <a href='https://twitter.com/share?url=$approot$thisPost[location]' target='_blank'><img src='/images/twitter-share.png' /></a> 
     ";
 
     $date = "";
