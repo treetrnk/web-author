@@ -2,7 +2,7 @@
 
 	$approot = 'http://nathanhare.net/';
 
-	include "dbconnect.php";
+	include "../dbconnect.php";
   // Create connection
   $con = new mysqli($servername, $username, $password, $db);
   global $con;

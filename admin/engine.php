@@ -3,8 +3,6 @@
   session_start();
   date_default_timezone_set('America/New_York');
 
-  include 'dbconnect.php';
-
   ini_set('display_errors', 'On'); 
   error_reporting(E_ALL | E_STRICT);
 
