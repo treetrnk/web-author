@@ -227,8 +227,20 @@
 
       case 'deletePost': //////////////////////////////////////////////////////
         
+        $oldLocSql = "SELECT location FROM posts WHERE id = $_POST[id] LIMIT 1";
+        $oldLoc = ["location" => ""];
+        if ($locResult = mysqli_query($con, $oldLocSql)) {
+          $oldLoc = mysqli_fetch_array($locResult);
+        }
+
         $sql = "DELETE FROM posts WHERE id = $_POST[id]";
         if ($result = mysqli_query($con, $sql)) {
+
+          if (file_exists($locprefix.$oldLoc['location'])) {
+            rmdirRec($locprefix.$oldLoc['location']);
+          } else {
+            $error = "Failed to delete  post's directory.<br />Error: <code>" . mysqli_error($con) . "</code><br />SQL: <code>$sql</code>";
+          }
           $success = "Post successfully deleted.";
         } else {
           $error = "Failed to delete post.<br />Error: <code>" . mysqli_error($con) . "</code><br />SQL: <code>$sql</code>";
