@@ -15,7 +15,7 @@
     <br />
     <form class="form" action="/search/" method="get">
       <div class="input-group">
-        <input type="text" name="s" value="<?=$keyword;?>" placeholder="Search" class="form-control" />
+        <input type="text" name="s" value="<?=$s;?>" placeholder="Search" class="form-control" />
         <div class="input-group-btn">
           <button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-search"></i></button>
         </div>
@@ -23,9 +23,39 @@
     </form>
     <br />
     <?php
+
+      $alltags = [];
+      $tagsql = "SELECT tags FROM posts WHERE time < CURRENT_TIMESTAMP";
+      if ($tagresult = mysqli_query($con, $tagsql)) {
+        while ($row = mysqli_fetch_array($tagresult)) {
+          if (!empty($row['tags'])) {
+            $taggrp = explode(",", $row['tags']);
+            foreach ($taggrp as $atag) {
+              if (!in_array($atag, $alltags)){
+                $alltags[] = $atag;
+              }
+            }
+          } 
+        }
+      }
+
+      sort($alltags, SORT_STRING);
+
+      if (!empty($alltags)) {
+        echo "<p><i class='glyphicon glyphicon-tags'></i> ";
+        foreach ($alltags as $alltag) {
+          $tagclass = "label-default";
+          if ($tag == $alltag) {$tagclass = "label-primary";}
+          echo "<a href='/search/?tag=$alltag' class='label $tagclass'>$alltag</a> ";
+        }
+        echo "</p>";
+      }
+
+      echo "<br /><hr /><br />";
+
       if (!empty($tag)) {
         echo "<h2>Results for &quot;$tag&quot; tag</h2>";
-        $sql = "SELECT * FROM posts WHERE time IS NOT NULL AND time < CURRENT_TIMESTAMP AND tags LIKE '%$tag%' AND (type = 'chapter' OR type = 'post') ORDER BY time DESC";
+        $sql = "SELECT * FROM posts WHERE time IS NOT NULL AND time < CURRENT_TIMESTAMP AND tags LIKE '%$tag%' ORDER BY time DESC";
       } else {
         echo "<h2>Results for &quot;$s&quot;</h2>";
         $sql = "SELECT * FROM posts WHERE time IS NOT NULL AND time < CURRENT_TIMESTAMP AND (body LIKE '%$s%' OR title LIKE '%$s%') ORDER BY time DESC";
@@ -44,7 +74,7 @@
                 <h3>" . ucfirst($row['type']) . ": <a href='$row[location]'>$row[title]</a></h3>
                 <p>" . substr(strip_tags($PD->text($row['body'])), 0, 200) . " . . .</p>
           ";
-          if (!empty($row['tags']) && ($row['type'] == 'chapter' || $row['type'] == 'post')) { 
+          if (!empty($row['tags'])) { 
             echo "<p><i class='glyphicon glyphicon-tag'></i> ";
             $tags = explode(",", $row['tags']);
             foreach($tags as $tag) {

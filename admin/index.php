@@ -41,6 +41,8 @@
 
   $pgTitle = ucfirst($page);
 
+  $locOrder = "(SUBSTRING(location, 1, LENGTH(location) - LENGTH(SUBSTRING_INDEX(REVERSE(location), '/', 2))))"; 
+
 ?>
 
 <!DOCTYPE html>

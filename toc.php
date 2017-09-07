@@ -4,7 +4,7 @@
         <ul>
   ";
 
-  if ($thisPost['type'] == 'book' || $thisPost['type'] == 'blog') {
+  if ($thisPost['type'] == 'story' || $thisPost['type'] == 'blog') {
     $sql = "SELECT * FROM posts WHERE parent = $thisPost[id] AND time IS NOT NULL";
   } else {
     $sql = "SELECT * FROM posts WHERE parent = $thisPost[parent] AND time IS NOT NULL";

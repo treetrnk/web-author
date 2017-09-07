@@ -5,7 +5,7 @@
 
 <?php
 
-  $sql = "SELECT *, (SUBSTRING(location, 1, LENGTH(location) - LENGTH(SUBSTRING_INDEX(REVERSE(location), '/', 2)))) as parentLoc FROM posts ORDER BY parentLoc ASC, sort ASC, time ASC, title ASC";
+  $sql = "SELECT *, $locOrder as parentLoc FROM posts ORDER BY parentLoc ASC, sort ASC, time ASC, title ASC";
 
   if ($result = mysqli_query($con, $sql)) { 
     $curPL = "";

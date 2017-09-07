@@ -106,6 +106,8 @@
 
     $keyword = "";
     $urlkeyword = "?a=a";
+    $s = "";
+    $tag = "";
     if (!empty($_GET['s'])) { $s = $_GET['s']; $keyword = $s; $urlkeyword = "?s=$s"; }
     if (!empty($_GET['tag'])) { $tag = $_GET['tag']; $keyword = $tag; $urlkeyword = "?tag=$tag"; }
     
@@ -152,9 +154,11 @@
     }
 
     $booktitle = "";
-    if ($thisPost['type'] == 'chapter' && !empty($parent)) {
+    $titlePrefix = "";
+    if (($thisPost['type'] == 'chapter' || $thisPost['type'] == 'post') && !empty($parent)) {
       $booktitle = "<h1>$parent[title]</h1>";
-    } elseif ($thisPost['type'] == 'book') {
+      $titlePrefix = "$parent[title]: ";
+    } elseif ($thisPost['type'] == 'story') {
       $booktitle = "<h1>$thisPost[title]</h1>";
     }
 
@@ -168,11 +172,11 @@
       ORDER BY sort ASC, time ASC
       LIMIT 1";
     $nextChapter = "";
-    $nextChapLi = "<li class='next disabled'><a href='#'><small>Next Chapter <span aria-hidden='true'>&rarr;</span></small></a></li>";
+    $nextChapLi = "<li class='next disabled'><a href='#'><small>Next <span aria-hidden='true'>&rarr;</span></small></a></li>";
     if ($nextresult = mysqli_query($con, $nextsql)) {
       $nextChapter = mysqli_fetch_array($nextresult);
       if (!empty($nextChapter)) {
-        $nextChapLi = "<li class='next'><a href='$nextChapter[location]'><small>Next Chapter <span aria-hidden='true'>&rarr;</span></small></a></li>";
+        $nextChapLi = "<li class='next'><a href='$nextChapter[location]'><small>Next <span aria-hidden='true'>&rarr;</span></small></a></li>";
       }
     }
     // Previous Chapter
@@ -183,11 +187,11 @@
       ORDER BY sort DESC, time DESC
       LIMIT 1";
     $prevChapter = "";
-    $prevChapLi = "<li class='previous disabled'><a href='#'><small><span aria-hidden='true'>&larr;</span> Previous Chapter</small></a></li>";
+    $prevChapLi = "<li class='previous disabled'><a href='#'><small><span aria-hidden='true'>&larr;</span> Previous</small></a></li>";
     if ($prevresult = mysqli_query($con, $prevsql)) {
       $prevChapter = mysqli_fetch_array($prevresult);
       if (mysqli_num_rows($prevresult)) {
-        $prevChapLi = "<li class='previous'><a href='$prevChapter[location]'><small><span aria-hidden='true'>&larr;</span> Previous Chapter</a></small></li>";
+        $prevChapLi = "<li class='previous'><a href='$prevChapter[location]'><small><span aria-hidden='true'>&larr;</span> Previous</a></small></li>";
       }
     }
 
@@ -209,7 +213,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-  <title><?=$thisPost['title'];?> - Nathan Hare</title>
+  <title><?="$titlePrefix$thisPost[title]";?> - Nathan Hare</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <meta name="description" content=<?="'$description'";?> />

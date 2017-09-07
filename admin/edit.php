@@ -46,16 +46,16 @@
     case 'page':
       $page = 'selected';
       break;
-    case 'book':
-      $book = 'selected';
+    case 'story':
+      $story = 'selected';
       break;
     case 'chapter':
       $chapter = 'selected';
       break;
-    case 'page':
+    case 'blog':
       $blog = 'selected';
       break;
-    case 'page':
+    case 'post':
       $post = 'selected';
       break;
   }
@@ -92,7 +92,7 @@
             <select name='parent' class='form-control' />
               <option value=''>(none)</option>";
 
-              if ($result = mysqli_query($con, "SELECT * FROM posts WHERE (length(location)-length(replace(location, '/', ''))) < 4")) {
+              if ($result = mysqli_query($con, "SELECT * FROM posts WHERE (length(location)-length(replace(location, '/', ''))) < 4 ORDER BY $locOrder, sort, title")) {
                 while ($curpost = mysqli_fetch_assoc($result)) {
                   if (!($edit && $curpost['id'] == $_GET['pid'])) {
                     $selected = "";
@@ -121,8 +121,8 @@
             <label class='control-label'>Page Type</label>
             <select name='type' class='form-control'>
               <option value='page' $page >Page - No comments, tags, ToC</option>
-              <option value='book' $book >Book - Descrition page for the Chapters under it</option>
-              <option value='chapter' $chapter>Chapter - Child to Book type</option>
+              <option value='story' $story >Story - Description page for the Chapters under it</option>
+              <option value='chapter' $chapter>Chapter - Child to Story type</option>
               <option value='blog' $blog>Blog - Lists the blog Posts under it</option>
               <option value='post' $post>Post - A blog post to be listed on a parent Blog</option>
             </select>
