@@ -22,7 +22,6 @@
     <div class="row">
       <div class="col-sm-6 col-xs-12">
         <?php
-/*
           if (!empty($thisPost['tags'])) {
             echo "<i class='glyphicon glyphicon-tag'></i> ";
             $tags = explode(",", $thisPost['tags']);
@@ -30,7 +29,6 @@
               echo "<a href='/search/?tag=$tag' class='label label-default'>$tag</a> ";
             }
           }
- */
         ?>
       </div>
       <div class="col-sm-6 col-xs-12 text-right share-btns">

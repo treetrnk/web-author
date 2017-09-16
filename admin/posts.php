@@ -53,15 +53,15 @@
             echo "
               <tr class='$class'>
                 <td>
-                  <a href='?page=edit&pid=$row[id]' class='btn btn-default btn-sm'><i class='glyphicon glyphicon-pencil' title='Edit'></i></a>
-                  <a href='$row[location]$urlcode' class='btn btn-default btn-sm' target='_blank' title='View'><i class='glyphicon glyphicon-eye-open'></i></a>
+                  <a href='?page=edit&pid=$row[id]' class='btn btn-default btn-sm' data-toggle='tooltip' title='Edit'><i class='glyphicon glyphicon-pencil'></i></a>
+                  <a href='$row[location]$urlcode' class='btn btn-default btn-sm' target='preview' data-toggle='tooltip' title='View'><i class='glyphicon glyphicon-eye-open'></i></a>
                 </td>
                 <th>$row[title]</th>
                 <td>$row[location]</td>
                 <td>" . ucfirst($row['type']) . "</td>
                 <td>$row[time]</td>
                 <td>
-                  <button type='button' class='btn btn-xs btn-danger' data-toggle='modal' data-target='#delMod' data-id='$row[id]' data-title='$row[title]' data-location='$row[location]'><i class='glyphicon glyphicon-remove'></i></button>
+                  <button type='button' class='btn btn-xs btn-danger' data-toggle='modal' data-toggle2='tooltip' title='Delete' data-target='#delMod' data-id='$row[id]' data-title='$row[title]' data-location='$row[location]'><i class='glyphicon glyphicon-remove'></i></button>
                 </td>
               </tr>
             ";

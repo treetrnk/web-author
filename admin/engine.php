@@ -52,7 +52,10 @@
           $error = "Please provide both a username and password.";
         }
 
-        $result = mysqli_query($con,"SELECT * FROM users WHERE username='$data[username]' LIMIT 1");
+        $_POST['username'] = mysqli_real_escape_string($con, trim($_POST['username']));
+        $_POST['password'] = mysqli_real_escape_string($con, $_POST['password']);
+
+        $result = mysqli_query($con,"SELECT * FROM users WHERE username='$_POST[username]' LIMIT 1");
         $row = mysqli_fetch_assoc($result);
 
         /*
@@ -88,182 +91,193 @@
       case 'addPost': /////////////////////////////////////////////////////////
       case 'editPost': ////////////////////////////////////////////////////////
 
-        //var_dump($_POST);
-        //die();
+        if (isset($_SESSION['userid'])) {
+          //var_dump($_POST);
+          //die();
 
-        if (!empty($_POST['title']) 
-          && !empty($_POST['body'])
-        ) {
-  
-          $title = "";
-          $body = "";
-          $parent = "";
-          $banner = "";
-          $tags = "";
-          $type = "";
-          
-          if (!empty($_POST['title'])) { $title = mysqli_real_escape_string($con, stripslashes(escape_str($_POST['title']))); }
-          if (!empty($_POST['body'])) { $body = mysqli_real_escape_string($con, stripslashes(escape_str($_POST['body']))); }
-          if (!empty($_POST['parent'])) { $parent = stripslashes($_POST['parent']); }
-          if (!empty($_POST['banner'])) { $banner = stripslashes(escape_str($_POST['banner'])); }
-          if (!empty($_POST['tags'])) { $tags = stripslashes(escape_str($_POST['tags'])); }
-          if (!empty($_POST['type'])) { $type = stripslashes($_POST['type']); }
+          if (!empty($_POST['title']) 
+            && !empty($_POST['body'])
+          ) {
+    
+            $title = "";
+            $body = "";
+            $sidebar = "";
+            $parent = "";
+            $banner = "";
+            $tags = "";
+            $type = "";
+            
+            if (!empty($_POST['title'])) { $title = mysqli_real_escape_string($con, stripslashes(escape_str($_POST['title']))); }
+            if (!empty($_POST['body'])) { $body = mysqli_real_escape_string($con, stripslashes(escape_str($_POST['body']))); }
+            if (!empty($_POST['sidebar'])) { $sidebar = mysqli_real_escape_string($con, stripslashes(escape_str($_POST['sidebar']))); }
+            if (!empty($_POST['parent'])) { $parent = stripslashes($_POST['parent']); }
+            if (!empty($_POST['banner'])) { $banner = stripslashes(escape_str($_POST['banner'])); }
+            if (!empty($_POST['tags'])) { $tags = stripslashes(escape_str($_POST['tags'])); }
+            if (!empty($_POST['type'])) { $type = stripslashes($_POST['type']); }
 
-          $publish1 = "";
-          $publish2 = "";
+            $publish1 = "";
+            $publish2 = "";
 
-          $parentloc = "/";
-          if ($parent != 0) {
-            $parentsql = "SELECT location FROM posts WHERE id = $parent LIMIT 1";
-            $parentdata = mysqli_fetch_array(mysqli_query($con, $parentsql));
-            $parentloc = $parentdata['location'];
-          }
-
-          $toRemove = array("!", "&#39;", "@", "#", "$", "%", "^", "&", "*", "(", ")", "-", "_", "=", "+", "[", "{", "]", "}", ";", ":", "'", '"', ",", "<", ".", ">", "/", "?", "\\", "|", "`", "~");
-
-          $thisFolder = strRemove($toRemove, $title);
-          $thisFolder = strtolower(str_replace(" ", "-", $thisFolder));
-          $location = "$parentloc$thisFolder/";
-
-          $extrasql = "";
-          if ($action == 'editPost') { $extrasql = " AND id != $_POST[id]"; }
-          $uniqueLocSql = "SELECT * FROM posts WHERE location = '$location'$extrasql";
-          
-          if (mysqli_num_rows($uniqueResult = mysqli_query($con, $uniqueLocSql)) == 0) {
-
-            if ($action == 'addPost') {
-              if ($_POST['publish'] == 'y') {
-                $publish1 = ", time";
-                $publish2 = ", CURRENT_TIMESTAMP";
-              }
-
-              //Insert into posts() VALUES();
-              $sql = "
-                INSERT INTO posts(
-                  title,
-                  body,
-                  author,
-                  parent,
-                  banner,
-                  tags,
-                  type,
-                  location,
-                  sort$publish1
-                ) VALUES (
-                  '$title',
-                  '$body',
-                  '$_SESSION[userid]',
-                  '$parent',
-                  '$banner',
-                  '$tags',
-                  '$type',
-                  '$location',
-                  '99'$publish2
-                )";
-
-            } else {
-              if ($_POST['publish'] == 'y') {
-                $publish1 = ", time = CURRENT_TIMESTAMP";
-              } elseif ($_POST['publish'] == 'unpublish') {
-                $publish1 = ", time = NULL";
-              }
-
-              $oldLocSql = "SELECT location FROM posts WHERE id = $_POST[id] LIMIT 1";
-              $oldLoc = mysqli_fetch_array(mysqli_query($con, $oldLocSql));
-
-              if ($location != $oldLoc['location']) {
-                if (file_exists($locprefix.$oldLoc['location'])) {
-                  rmdirRec($locprefix.$oldLoc['location']);
-                }
-              }
-
-              $sql = "
-                UPDATE posts SET
-                  title='$title',
-                  body='$body',
-                  author='$_SESSION[userid]',
-                  parent='$parent',
-                  banner='$banner',
-                  tags='$tags',
-                  type='$type',
-                  location='$location'$publish1
-                WHERE id = $_POST[id]
-              ";
-
-              $pid = $_POST['id'];
+            $parentloc = "/";
+            if ($parent != 0) {
+              $parentsql = "SELECT location FROM posts WHERE id = $parent LIMIT 1";
+              $parentdata = mysqli_fetch_array(mysqli_query($con, $parentsql));
+              $parentloc = $parentdata['location'];
             }
 
-            if ($result = mysqli_query($con, $sql)) {
+            $toRemove = array("!", "&#39;", "@", "#", "$", "%", "^", "&", "*", "(", ")", "-", "_", "=", "+", "[", "{", "]", "}", ";", ":", "'", '"', ",", "<", ".", ">", "/", "?", "\\", "|", "`", "~");
 
-              if ($action == "addPost") {
-                $pid = mysqli_insert_id($con);
+            $thisFolder = strRemove($toRemove, $title);
+            $thisFolder = strtolower(str_replace(" ", "-", $thisFolder));
+            $location = "$parentloc$thisFolder/";
+
+            $extrasql = "";
+            if ($action == 'editPost') { $extrasql = " AND id != $_POST[id]"; }
+            $uniqueLocSql = "SELECT * FROM posts WHERE location = '$location'$extrasql";
+            
+            if (mysqli_num_rows($uniqueResult = mysqli_query($con, $uniqueLocSql)) == 0) {
+
+              if ($action == 'addPost') {
+                if ($_POST['publish'] == 'y') {
+                  $publish1 = ", time";
+                  $publish2 = ", CURRENT_TIMESTAMP";
+                }
+
+                //Insert into posts() VALUES();
+                $sql = "
+                  INSERT INTO posts(
+                    title,
+                    body,
+                    sidebar,
+                    author,
+                    parent,
+                    banner,
+                    tags,
+                    type,
+                    location,
+                    sort$publish1
+                  ) VALUES (
+                    '$title',
+                    '$body',
+                    '$sidebar',
+                    '$_SESSION[userid]',
+                    '$parent',
+                    '$banner',
+                    '$tags',
+                    '$type',
+                    '$location',
+                    '75'$publish2
+                  )";
+
+              } else {
+                if ($_POST['publish'] == 'y') {
+                  $publish1 = ", time = CURRENT_TIMESTAMP";
+                } elseif ($_POST['publish'] == 'unpublish') {
+                  $publish1 = ", time = NULL";
+                }
+
+                $oldLocSql = "SELECT location FROM posts WHERE id = $_POST[id] LIMIT 1";
+                $oldLoc = mysqli_fetch_array(mysqli_query($con, $oldLocSql));
+
+                if ($location != $oldLoc['location']) {
+                  if (file_exists($locprefix.$oldLoc['location'])) {
+                    rmdirRec($locprefix.$oldLoc['location']);
+                  }
+                }
+
+                $sql = "
+                  UPDATE posts SET
+                    title='$title',
+                    body='$body',
+                    sidebar='$sidebar',
+                    author='$_SESSION[userid]',
+                    parent='$parent',
+                    banner='$banner',
+                    tags='$tags',
+                    type='$type',
+                    location='$location'$publish1
+                  WHERE id = $_POST[id]
+                ";
+
+                $pid = $_POST['id'];
               }
 
-              //$error = $location;
-              if (!file_exists($locprefix.$location)) {
-                mkdir($locprefix.$location, 0775, true) or die("Unable to create directory");             
-              }
-              $myfile = fopen($locprefix.$location."index.php", "w") or die("Unable to write file");
-              $txt = '<?php $pid=' . $pid . "; include '$locprefix/index.php'; ?>";
-              fwrite($myfile, $txt);
-              fclose($myfile);
+              if ($result = mysqli_query($con, $sql)) {
 
-              $success = "Successfully saved post.";
-              $page = "posts";
-            } else { 
-              $error = "The post could not be saved.<br />Error: <code>" . mysqli_error($con) . "</code><br />SQL: <code>$sql</code>";
+                if ($action == "addPost") {
+                  $pid = mysqli_insert_id($con);
+                }
+
+                //$error = $location;
+                if (!file_exists($locprefix.$location)) {
+                  mkdir($locprefix.$location, 0775, true) or die("Unable to create directory");             
+                }
+                $myfile = fopen($locprefix.$location."index.php", "w") or die("Unable to write file");
+                $txt = '<?php $pid=' . $pid . "; include '$locprefix/index.php'; ?>";
+                fwrite($myfile, $txt);
+                fclose($myfile);
+
+                $success = "Successfully saved post.";
+                $page = "posts";
+              } else { 
+                $error = "The post could not be saved.<br />Error: <code>" . mysqli_error($con) . "</code><br />SQL: <code>$sql</code>";
+              }
+
+            } else {
+              $notunique = mysqli_fetch_array($uniqueResult);
+              $error = "The title is already in use. Please pick a differnt one.<br/>Match: <code>" . var_dump($notunique) . "</code>";
             }
 
           } else {
-            $notunique = mysqli_fetch_array($uniqueResult);
-            $error = "The title is already in use. Please pick a differnt one.<br/>Match: <code>" . var_dump($notunique) . "</code>";
-          }
+            $error = "One or more of the required fields are blank.";
+          }  
 
-        } else {
-          $error = "One or more of the required fields are blank.";
-        }  
-
+        }
         break;
 
       case 'deletePost': //////////////////////////////////////////////////////
         
-        $oldLocSql = "SELECT location FROM posts WHERE id = $_POST[id] LIMIT 1";
-        $oldLoc = ["location" => ""];
-        if ($locResult = mysqli_query($con, $oldLocSql)) {
-          $oldLoc = mysqli_fetch_array($locResult);
-        }
-
-        $sql = "DELETE FROM posts WHERE id = $_POST[id]";
-        if ($result = mysqli_query($con, $sql)) {
-
-          if (file_exists($locprefix.$oldLoc['location'])) {
-            rmdirRec($locprefix.$oldLoc['location']);
-          } else {
-            $error = "Failed to delete  post's directory.<br />Error: <code>" . mysqli_error($con) . "</code><br />SQL: <code>$sql</code>";
+        if (isset($_SESSION['userid'])) {
+          $oldLocSql = "SELECT location FROM posts WHERE id = $_POST[id] LIMIT 1";
+          $oldLoc = ["location" => ""];
+          if ($locResult = mysqli_query($con, $oldLocSql)) {
+            $oldLoc = mysqli_fetch_array($locResult);
           }
-          $success = "Post successfully deleted.";
-        } else {
-          $error = "Failed to delete post.<br />Error: <code>" . mysqli_error($con) . "</code><br />SQL: <code>$sql</code>";
-        }
 
+          $sql = "DELETE FROM posts WHERE id = $_POST[id]";
+          if ($result = mysqli_query($con, $sql)) {
+
+            if (file_exists($locprefix.$oldLoc['location'])) {
+              rmdirRec($locprefix.$oldLoc['location']);
+            } else {
+              $error = "Failed to delete  post's directory.<br />Error: <code>" . mysqli_error($con) . "</code><br />SQL: <code>$sql</code>";
+            }
+            $success = "Post successfully deleted.";
+          } else {
+            $error = "Failed to delete post.<br />Error: <code>" . mysqli_error($con) . "</code><br />SQL: <code>$sql</code>";
+          }
+
+        }
         break; 
 
       case 'sort': //////////////////////////////////////////////////////
 
-        foreach($_POST as $key => $value) {
-          if (is_int($key)) {
-            if (!is_numeric($value) || !is_int($value * 1) || $value < -1 || $value > 100) {
-              if (!empty($value)) {
-                $error = "The sort order must be a number between 0 and 100";
+        if (isset($_SESSION['userid'])) {
+          foreach($_POST as $key => $value) {
+            if (is_int($key)) {
+              if (!is_numeric($value) || !is_int($value * 1) || $value < -1 || $value > 100) {
+                if (!empty($value)) {
+                  $error = "The sort order must be a number between 0 and 100";
+                }
+                $value = 75;
               }
-              $value = 99;
+              $sql = "UPDATE posts SET sort = $value WHERE id = $key";
+              mysqli_query($con, $sql);
+              $success = "Sort order has been successfully updated.";
             }
-            $sql = "UPDATE posts SET sort = $value WHERE id = $key";
-            mysqli_query($con, $sql);
-            $success = "Sort order has been successfully updated.";
           }
-        }
 
+        }
         break;
 
     }

@@ -24,23 +24,6 @@
     <br />
     <?php
 
-      $alltags = [];
-      $tagsql = "SELECT tags FROM posts WHERE time < CURRENT_TIMESTAMP";
-      if ($tagresult = mysqli_query($con, $tagsql)) {
-        while ($row = mysqli_fetch_array($tagresult)) {
-          if (!empty($row['tags'])) {
-            $taggrp = explode(",", $row['tags']);
-            foreach ($taggrp as $atag) {
-              if (!in_array($atag, $alltags)){
-                $alltags[] = $atag;
-              }
-            }
-          } 
-        }
-      }
-
-      sort($alltags, SORT_STRING);
-
       if (!empty($alltags)) {
         echo "<p><i class='glyphicon glyphicon-tags'></i> ";
         foreach ($alltags as $alltag) {

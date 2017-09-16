@@ -1,9 +1,18 @@
 <?php 
 
-  echo "<h2>Table of Contents</h2>
-        <ul>
+  if (!empty($thisPost['sidebar'])) {
+    $sidebar = $PD->text($thisPost['sidebar']);
+  } elseif (!empty($parent) && ($thisPost['type'] == 'chapter' || $thisPost['type'] == 'post')) {
+    $sidebar = $PD->text($parent['sidebar']);
+  } else {
+    $sidebar = "";
+  }
+
+  echo "$sidebar
+       <!-- <ul> -->
   ";
 
+/*
   if ($thisPost['type'] == 'story' || $thisPost['type'] == 'blog') {
     $sql = "SELECT * FROM posts WHERE parent = $thisPost[id] AND time IS NOT NULL";
   } else {
@@ -19,7 +28,33 @@
       }
     }
   }
+ */
 
-  echo "</ul>";
+  function findChildren($id, $children, $thisPostID) {
+    if (!empty($children["$id"])) {
+      echo "<ul>";
+      foreach ($children["$id"] as $child) {
+        if ($child["id"] == $thisPostID) {
+          echo "<li><b>$child[title]</b>";
+        } else {
+          echo "<li><a href='$child[location]'>$child[title]</a>";
+        }
+        if (!empty($children["$child[id]"])) {
+          findChildren($child["id"], $children, $thisPostID);
+        }
+        echo "</li>";
+      }
+      echo "</ul>"; 
+    }
+  }
+
+  if ($thisPost['type'] == 'story' || $thisPost['type'] == 'blog') {
+    findChildren($thisPost['id'], $children, $thisPost['id']);
+  } else {
+    findChildren($thisPost['parent'], $children, $thisPost['id']);
+  }
+//  var_dump($children);
+
+  //echo "</ul>";
 
 ?>

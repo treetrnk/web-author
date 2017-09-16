@@ -72,7 +72,7 @@
 			ul.navlinks li:hover {
 				background-color: rgba(256,256,256, .06);
 			}
-			ul.navlinks li ul {
+			ul.navlinks li .navdrop {
 				display: none;
 				line-height: initial;
 				position: absolute;
@@ -83,37 +83,42 @@
 				-webkit-box-shadow: 3px 3px 25px 1px #222;
 				box-shadow:         3px 3px 25px 1px #222;
 				padding: 0;
-				min-width: 175px;
+				min-width: 150px;
+        max-height: calc(100%-68px);
+        overflow-y: auto;
 			}
-			ul.navlinks li:hover ul {
+			ul.navlinks li:hover .navdrop {
 				display: block;
 			}
-			ul.navlinks ul li {
+      .navdrop ul, .navdrop ul li {
+        margin: 0;
+        padding: 0;
+        float: none;
+        list-style: none;
+      }
+			.navdrop ul a {
 				display: block;
-				float: left;
 				width: 100%;
         margin: 0px;
 				text-align: left;
-				padding: 7px;
-			}
-      ul.navlinks ul a {
+				padding: 0 7px 0 7px;
 				text-transform: none;
         font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-				line-height: normal;
+				line-height: 35px;
+        white-space: nowrap;
       }
-			ul.navlinks ul ul {
-				top: 0px;
-				left: 100%;
-			}
-			ul.navlinks ul ul li {
-				z-index: 5;
-			}
-			header nav.navlinks ul.navlinks li ul li ul {
+			.navdrop ul ul {
 				display: none;
 			}
-			header nav.navlinks ul.navlinks li ul li:hover > ul {
-				display:block;
-			}
+      .navdrop ul ul a {
+        padding-left: 20px;
+        border-top: 1px solid #000;
+        border-bottom: 1px solid #444;
+        background-color: rgba(0, 0, 0, 0.25);
+      }
+      .navdrop a i.glyphicon {
+        padding: 7px;
+      }
       #toggle-nav {
 				background-color: #222222;
 				min-width: 250px;
@@ -198,6 +203,7 @@
 				border-radius: 5px;
         text-transform: uppercase;
 			}
+      <?=$theme['modal'];?>
 			section.content-wrapper {
         background-color: <?=$theme['contentbg'];?>;
         color: <?=$theme['color'];?>;
@@ -291,6 +297,11 @@
         -webkit-box-shadow: 3px 3px 10px 1px rgba(0,0,0, .5);
         box-shadow:         3px 3px 10px 1px rgba(0,0,0, .5);
         z-index: 2;
-        display: none;
+      }
+      #sub-btn-close {
+        position: fixed;
+        bottom: 50px;
+        right: 20px;
+        z-index: 2;
       }
 		</style>

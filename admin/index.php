@@ -29,6 +29,8 @@
     $active['posts'] = "active";
   } elseif ($page == 'navigation') {
     $active['navigation'] = "active";
+  } elseif ($page == 'subscriptions') {
+    $active['subscriptions'] = "active";
   }
 
   $postsArr = array();
@@ -44,6 +46,7 @@
   $locOrder = "(SUBSTRING(location, 1, LENGTH(location) - LENGTH(SUBSTRING_INDEX(REVERSE(location), '/', 2))))"; 
 
 ?>
+    <script src="/js/bootstrap.min.js"></script>
 
 <!DOCTYPE html>
 <html>
@@ -159,6 +162,8 @@
 					<ul class="nav navbar-nav">
           <li class="<?=$active['posts'];?>"><a href="?page=posts">Posts <span class="sr-only">(current)</span></a></li>
 						<li class="<?=$active['navigation'];?>"><a href="/admin/?page=navigation">Navigation</a></li>
+            <li class="<?=$active['subscriptions'];?>"><a href="/admin/?page=subscriptions">Subscriptions</a></li>
+						<li><a href="/admin/logs.php" target="logs">Logs</a></li>
 						<li class="disabled"><a href="#">Users</a></li>
 					</ul>
 					<div class="nav navbar-nav navbar-right logout">
@@ -187,6 +192,14 @@
     <script src="//rawgit.com/jeresig/jquery.hotkeys/master/jquery.hotkeys.js"></script>
     <script>
       $(document).ready(function() {
+
+        $(function () {
+          $("[data-toggle='tooltip']").tooltip();
+        })
+
+        $(function () {
+          $("[data-toggle2='tooltip']").tooltip();
+        })
 
         var words = $('#md-input').val().match(/[a-zA-Z.0-9/-]+/g).length;
         $('#display_count').text("("+words+" words)");

@@ -17,6 +17,10 @@
     die();
   }
   
+  if (!empty($_POST['subscribe']) || !empty($_POST['unsubscribe'])) {
+    include 'subscribe.php';
+  }
+
   // Create Array of posts
   $postsArr = array();
   $sql = "SELECT * FROM posts ORDER BY id";
@@ -25,6 +29,19 @@
       $postsArr[$row['id']] = $row;
     }
   }
+
+  // Create Array of posts
+  $children = [];
+  $sql = "SELECT * FROM posts WHERE time < CURRENT_TIMESTAMP ORDER BY sort, time, title";
+  if ($result = mysqli_query($con, $sql)) {
+    while ($row = mysqli_fetch_array($result)) {
+      if (!isset($children["$row[parent]"])) {
+        $children["$row[parent]"] = [];
+      }
+      $children["$row[parent]"][] = $row;
+    }
+  }
+  global $children;
 
   //Get children of provided parent id
   function getChildren($parentid, $con) {
@@ -69,6 +86,24 @@
     }
   }
 
+  $alltags = [];
+  $tagsql = "SELECT tags FROM posts WHERE time < CURRENT_TIMESTAMP";
+  if ($tagresult = mysqli_query($con, $tagsql)) {
+    while ($row = mysqli_fetch_array($tagresult)) {
+      if (!empty($row['tags'])) {
+        $taggrp = explode(",", $row['tags']);
+        foreach ($taggrp as $atag) {
+          if (!in_array($atag, $alltags)){
+            $alltags[] = $atag;
+          }
+        }
+      } 
+    }
+  }
+
+  sort($alltags, SORT_STRING);
+
+
   $sql = "SELECT id,title,parent FROM posts WHERE time IS NOT NULL ORDER BY sort ASC,title ASC";
   $postList = mysqli_query($con, $sql);
 
@@ -86,7 +121,8 @@
       "contentbg" => "#ffffff",
       "color" => "#333333",
       "breadcrumb" => "",
-      "pager" => ""
+      "pager" => "",
+      "modal" => ""
   ];
   if (!empty($_SESSION['theme']) && $_SESSION['theme'] == 'dark') {
       $theme = [
@@ -94,7 +130,8 @@
           "contentbg" => "#222222",
           "color" => "#aaaaaa",
           "breadcrumb" => "background-color: #333333",
-          "pager" => "background-color: #2f2f2f;"
+          "pager" => "background-color: #2f2f2f;",
+          "modal" => ".modal-content{background-color:#222222;color:#aaaaaa;}"
       ];
   } elseif (!empty($_SESSION['theme'])) {
       unset($_SESSION['theme']);
@@ -117,8 +154,10 @@
     $thisPost['tags'] = "";
     $thisPost['location'] = "/search/";
     $banner = "http://i.imgur.com/wm1M89Q.jpg";
+    $titlePrefix = "";
     $booktitle = "";
     $description = "Search results for $keyword.";
+    $section = "";
 
   } else {
 
@@ -131,6 +170,27 @@
       }
     }
 
+    $bcrumbs = ["<li class='active'>$thisPost[title]</li>"];
+    $parent = "";
+    $parents = [];
+
+    if ($thisPost['parent'] != 0) {
+      $parPost = $postsArr["$thisPost[parent]"];
+      $parent = $postsArr["$thisPost[parent]"];
+    }
+
+    while (!empty($parPost)) {
+      $parents[] = $parPost;
+      array_unshift($bcrumbs, "<li><a href='$parPost[location]'>$parPost[title]</a></li>");
+
+      if ($parPost['parent'] != 0) {
+        $parPost = $postsArr["$parPost[parent]"];
+      } else {
+        $parPost = NULL;
+      }
+    }
+
+    /*
     $parent = "";
     $topparent = "";
     $parentli = "";
@@ -143,8 +203,23 @@
         $topparentli = "<li><a href='$topparent[location]'>$topparent[title]</a></li>";
       }
     }
+    */
 
     $banner = "/images/writing-banner.jpg";
+
+    if (!empty($thisPost['banner'])) {
+      $banner = $thisPost['banner'];
+    } else {
+      foreach ($parents as $p) {
+        if (!empty($p["banner"])) {
+          $banner = $p["banner"];
+          break;
+        }
+      }
+    }
+
+
+    /*
     if (!empty($thisPost['banner'])) {
       $banner = $thisPost['banner'];
     } elseif (!empty($parent['banner'])) {
@@ -152,6 +227,7 @@
     } elseif (!empty($topparent['banner'])) {
       $banner = $topparent['banner'];
     }
+    */
 
     $booktitle = "";
     $titlePrefix = "";
@@ -167,6 +243,7 @@
     // Next Chapter
     $nextsql = "SELECT id,title,location FROM posts
       WHERE parent = $thisPost[parent]
+        AND time < CURRENT_TIMESTAMP
         AND (sort > $thisPost[sort] OR time > '$thisPost[time]')
         AND id != $thisPost[id]
       ORDER BY sort ASC, time ASC
@@ -176,12 +253,13 @@
     if ($nextresult = mysqli_query($con, $nextsql)) {
       $nextChapter = mysqli_fetch_array($nextresult);
       if (!empty($nextChapter)) {
-        $nextChapLi = "<li class='next'><a href='$nextChapter[location]'><small>Next <span aria-hidden='true'>&rarr;</span></small></a></li>";
+        $nextChapLi = "<li class='next'><a href='$nextChapter[location]' id='nextPage'><small>Next <span aria-hidden='true'>&rarr;</span></small></a></li>";
       }
     }
     // Previous Chapter
     $prevsql = "SELECT id,title,location FROM posts
       WHERE parent = $thisPost[parent]
+        AND time < CURRENT_TIMESTAMP
         AND (sort < $thisPost[sort] OR time < '$thisPost[time]')
         AND id != $thisPost[id]
       ORDER BY sort DESC, time DESC
@@ -191,7 +269,7 @@
     if ($prevresult = mysqli_query($con, $prevsql)) {
       $prevChapter = mysqli_fetch_array($prevresult);
       if (mysqli_num_rows($prevresult)) {
-        $prevChapLi = "<li class='previous'><a href='$prevChapter[location]'><small><span aria-hidden='true'>&larr;</span> Previous</a></small></li>";
+        $prevChapLi = "<li class='previous'><a href='$prevChapter[location]' id='prevPage'><small><span aria-hidden='true'>&larr;</span> Previous</a></small></li>";
       }
     }
 
@@ -206,6 +284,28 @@
     if (!empty($thisPost['time'])) {
       $date = date_format(date_create($thisPost['time']), "M. j, Y - g:i A");
     }
+
+    $section = "";
+    if (!empty($parents) ) {
+      $section = $parents[0]["title"];
+    }
+
+    $thisPost['words'] = str_word_count(strip_tags($PD->text($thisPost['body'])));
+    $readTimeHrs = intval($thisPost['words']/200/60);
+    $readTimeMins = intval($thisPost['words']/200) - $readTimeHrs * 60;
+    $readTimeSecs = intval($thisPost['words']/200*60) - intval($thisPost['words']/200)*60;
+    $thisPost['readTime'] = "";
+    if ($readTimeHrs > 0) {
+      $thisPost['readTime'] .= "$readTimeHrs hrs. ";
+    }
+    if ($readTimeMins > 0) {
+      $thisPost['readTime'] .= "$readTimeMins mins. ";
+    }
+    if ($readTimeSecs > 0) {
+      $thisPost['readTime'] .= "$readTimeSecs secs.";
+    }
+
+    $thisPost['readTime'] = trim($thisPost['readTime']);
 
   }
 
@@ -241,7 +341,7 @@
     <meta property="og:site_name" content="The Writings of Nathan Hare" />
     <meta property="article:published_time" content=<?="'$thisPost[time]'";?> />
     <meta property="article:modified_time" content=<?="'$thisPost[time]'";?> />
-    <meta property="article:section" content="<?=$postArr[$thisPost['parent']]['title'];?>" />
+    <meta property="article:section" content="<?=$section?>" />
     <meta property="article:tag" content=<?="'$thisPost[tags]'";?> />
     <meta property="fb:admins" content="Facebook numberic ID" />
 
@@ -249,6 +349,7 @@
 		<link href="/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <!---<script src="https://use.fontawesome.com/0dabb168cf.js"></script>--->
 
+    <script src='https://www.google.com/recaptcha/api.js'></script>
     <?php include "css/css.php" ?>
 
 	</head>
@@ -273,13 +374,13 @@
                   echo "<li><a href='$topLink[location]'>$topLink[title]";
 
                   if (array_key_exists("children", $topLink) && !empty($topLink["children"])) {
-                    echo " <i class='glyphicon glyphicon-menu-down dropdown'></i></a><ul>";
+                    echo " <i class='glyphicon glyphicon-menu-down'></i></a><div class='navdrop'><ul>";
 
                     foreach ($topLink["children"] as $midLink) {
                       echo "<li><a href='$midLink[location]'>$midLink[title]";
 
                       if (array_key_exists("children", $midLink) && !empty($midLink["children"])) {
-                        echo " <i class='glyphicon glyphicon-menu-right dropdown'></i></a><ul>";
+                        echo " <i class='glyphicon glyphicon-menu-down dropdown'></i></a><ul>";
 
                         foreach ($midLink["children"] as $btmLink) {
                           echo "<li><a href='$btmLink[location]'>$btmLink[title]</a></li>";
@@ -292,9 +393,9 @@
                     }
 
                   } else {
-                    echo "</a><ul>";
+                    echo "</a><div class='hidden'><ul>";
                   }
-                  echo "</ul></li>";  
+                  echo "</ul><div></li>";  
                 }
 
               ?>
@@ -368,13 +469,72 @@
 									<button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-search"></i></button>
 								</span>
 							</div>
+              <?php
+                if (!empty($alltags)) {
+                  echo "<br /><p><i class='glyphicon glyphicon-tags'></i> ";
+                  foreach ($alltags as $alltag) {
+                    $tagclass = "label-default";
+                    echo "<a href='/search/?tag=$alltag' class='label $tagclass'>$alltag</a> ";
+                  }
+                  echo "</p>";
+                }
+              ?>
 						</form>
 					</div>
 				</div>
 			</div>
 		</div>
 
-    <button type="button" class="btn btn-primary" id="sub-btn"><i class="glyphicon glyphicon-envelope"></i> Subscribe</button>
+		<!-- Modal -->
+		<div class="modal fade" id="subscribeMod" tabindex="-1" role="dialog" aria-labelledby="subscribeModLabel">
+			<form class="form" action="" method="post">
+        <input type="hidden" name="subscribe" value="yes" />
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+							<h3 class="modal-title" id="subscribeModLabel"><i class="glyphicon glyphicon-envelope"></i> Subscribe!</h3>
+						</div>
+						<div class="modal-body">
+							<small><p>Subscribe now to receive updates every time a new chapter is posted.</p></small>
+							<div class="row">
+								<div class="col-xs-12">
+									<small><label class="control-label">Email <span class="text-danger"><b>*</b></span></label></small>
+									<input type="email" placeholder="example@email.com" name="email" class="form-control" maxlength="200" required />
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-12">
+									<small><label class="control-label">Name</label> (Optional)</small>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-6">
+									<input type="text" name="fname" placeholder="First" class="form-control" maxlength="50" />
+								</div>
+								<div class="col-xs-6">
+									<input type="text" name="lname" placeholder="Last" class="form-control" maxlength="50" />
+								</div>
+							</div>
+							<br />
+							<div class="row">
+								<div class="col-xs-12 text-center">
+                  <div class="g-recaptcha" data-sitekey="6LcjGTAUAAAAAJx8FmzDgGMzuiRDElIgTRbkdqxG"></div>
+								</div>
+							</div>
+            </div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+							<button type="submit" class="btn btn-primary">Subscribe</button>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+
+    <button type="button" class="close" id="sub-btn-close"><small><i class="glyphicon glyphicon-remove"></i></small></button>
+
+    <button type="button" class="btn btn-primary" id="sub-btn" data-toggle="modal" data-target="#subscribeMod" title="Subscribe"><i class="glyphicon glyphicon-envelope"></i><span class="hidden-xs"> Subscribe</span></button>
 
 		<section class="container content-wrapper">
 
@@ -384,9 +544,18 @@
             <div class='row'>
               <div class='col-xs-12'>
                 <ol class='breadcrumb'>
+          ";
+
+          foreach($bcrumbs as $bc) {
+            echo $bc;
+          }
+
+          /*
                   $topparentli
                   $parentli
                   <li class='active'>$thisPost[title]</li>
+          */
+          echo "
                 </ol>
               </div>
             </div>
@@ -395,11 +564,18 @@
       ?>
 
       <?php 
+        if (!empty($error)) {
+          echo "<div class='alert alert-danger' role='alert'><b>Error!</b> $error</div>";
+        } elseif (!empty($success)) {
+          echo "<div class='alert alert-success' role='alert'><b>Success! </b>$success</div>";
+        }
+
         if ($search) {
           include "search.php";
         } else {
           include "$thisPost[type].php"; 
         }
+
       ?>
 
     </section>
@@ -437,7 +613,7 @@
 					}
 				});
 
-				$('#toggle-nav i.dropdown').click(function(e) {
+				$('i.dropdown').click(function(e) {
 					e.preventDefault();
 					var $this = $(this);
 					if ($this.hasClass('glyphicon-menu-down')) {
@@ -460,6 +636,32 @@
         $("#searchMod").on("shown.bs.modal", function() {
           $("#searchInput").focus(); 
         });
+
+        $(document).on('keydown', function(e) {
+          //console.log(e.type);
+          if (e.which == 37) {
+            if ($("#prevPage").length != 0) {
+              //console.log('prev');
+              //$('#prevPage').trigger('click');
+              window.location = $('#prevPage').attr('href');
+            }
+          } else if (e.which == 39) {
+            if ($("#nextPage").length != 0) {
+              //console.log('next');
+              //$('#nextPage').trigger('click');
+              window.location = $('#nextPage').attr('href');
+            }
+          }
+        });
+
+        $("#sub-btn-close").click(function() {
+          $("#sub-btn-close").hide();
+          $("#sub-btn").hide();
+        });
+
+        $(function () {
+          $('[data-toggle="tooltip"]').tooltip()
+        })
 
 			});
 		</script>

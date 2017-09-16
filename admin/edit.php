@@ -24,6 +24,7 @@
     if (!empty($_POST['tags'])){         $tags         = $_POST['tags']; }
     if (!empty($_POST['type'])){         $type         = $_POST['type']; }
     if (!empty($_POST['body'])){         $body         = $_POST['body']; }
+    if (!empty($_POST['sidebar'])){      $sidebar      = $_POST['sidebar']; }
     if (!empty($_POST['location'])){     $location     = $_POST['location']; }
     $actionPage = "/admin/";
 
@@ -38,6 +39,7 @@
     if (!empty($row['tags'])){         $tags         = $row['tags']; }
     if (!empty($row['type'])){         $type         = $row['type']; }
     if (!empty($row['body'])){         $body         = $row['body']; }
+    if (!empty($row['sidebar'])){      $sidebar      = $row['sidebar']; }
     if (!empty($row['location'])){     $location     = $row['location']; }
     $actionPage = "/admin/?page=edit&pid=$_GET[pid]";
   }
@@ -75,7 +77,7 @@
     if (empty($row['time'] || strtotime($row['time']) > strtotime(date("Y-m-d H:i:s")))) {
       $urlcode = "?preview=" . urlencode(password_hash($row['title'], PASSWORD_DEFAULT));
     }
-    echo "<p><a href='$row[location]$urlcode' target='_blank'>View Post</a></p>";
+    echo "<p><a href='$row[location]$urlcode' target='preview'>View Post</a></p>";
   }
 
   echo "
@@ -92,12 +94,14 @@
             <select name='parent' class='form-control' />
               <option value=''>(none)</option>";
 
-              if ($result = mysqli_query($con, "SELECT * FROM posts WHERE (length(location)-length(replace(location, '/', ''))) < 4 ORDER BY $locOrder, sort, title")) {
+              if ($result = mysqli_query($con, "SELECT * FROM posts ORDER BY $locOrder, sort, title")) {
+                // Add the following to the query above to limit it to first and second tier posts only.
+                // WHERE (length(location)-length(replace(location, '/', ''))) < 4 
                 while ($curpost = mysqli_fetch_assoc($result)) {
                   if (!($edit && $curpost['id'] == $_GET['pid'])) {
                     $selected = "";
                     if ($parent == $curpost['id']) { $selected = "selected"; }
-                    echo "<option value='$curpost[id]' $selected >$curpost[title]</option>";
+                    echo "<option value='$curpost[id]' $selected >$curpost[title] ($curpost[location])</option>";
                   }
                 }
               }
@@ -126,6 +130,12 @@
               <option value='blog' $blog>Blog - Lists the blog Posts under it</option>
               <option value='post' $post>Post - A blog post to be listed on a parent Blog</option>
             </select>
+          </div>
+        </div>
+        <div class='row'>
+          <div class='col-xs-12'>
+            <label class='control-label'>Sidebar</label>
+            <textarea name='sidebar' class='form-control' data-provide='markdown' rows='5'>$sidebar</textarea>
           </div>
         </div>
         <div class='row'>
