@@ -46,7 +46,6 @@
   $locOrder = "(SUBSTRING(location, 1, LENGTH(location) - LENGTH(SUBSTRING_INDEX(REVERSE(location), '/', 2))))"; 
 
 ?>
-    <script src="/js/bootstrap.min.js"></script>
 
 <!DOCTYPE html>
 <html>
