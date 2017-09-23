@@ -24,7 +24,7 @@
 <div class="row">
   <div class="col-xs-12 content">
     <h1>Posts</h1>
-    <a href="?page=edit" class="btn btn-primary"><i class="glyphon glyphicon-plus"></i> New Post</a><br /><br />
+    <a href="?page=edit" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> New Post</a><br /><br />
     <div class="col-xs-12">
       <table class="table table-hover table-responsive">
         <thead>

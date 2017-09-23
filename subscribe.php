@@ -16,7 +16,6 @@
       } else {
 
         $url = "https://www.google.com/recaptcha/api/siteverify";
-        $secretKey = "6LcjGTAUAAAAAMqNHjeNbauIexGqtfFoYnMabLip";
         if(isset($_POST['g-recaptcha-response']) && !empty($_POST['g-recaptcha-response'])){
           //get verified response data
           $captcha = $_POST['g-recaptcha-response'];

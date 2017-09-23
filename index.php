@@ -253,7 +253,7 @@
     if ($nextresult = mysqli_query($con, $nextsql)) {
       $nextChapter = mysqli_fetch_array($nextresult);
       if (!empty($nextChapter)) {
-        $nextChapLi = "<li class='next'><a href='$nextChapter[location]' id='nextPage'><small>Next <span aria-hidden='true'>&rarr;</span></small></a></li>";
+        $nextChapLi = "<li class='next'><a href='$nextChapter[location]' id='nextPage' rel='next'><small>Next <span aria-hidden='true'>&rarr;</span></small></a></li>";
       }
     }
     // Previous Chapter
@@ -269,7 +269,7 @@
     if ($prevresult = mysqli_query($con, $prevsql)) {
       $prevChapter = mysqli_fetch_array($prevresult);
       if (mysqli_num_rows($prevresult)) {
-        $prevChapLi = "<li class='previous'><a href='$prevChapter[location]' id='prevPage'><small><span aria-hidden='true'>&larr;</span> Previous</a></small></li>";
+        $prevChapLi = "<li class='previous'><a href='$prevChapter[location]' id='prevPage' rel='prev'><small><span aria-hidden='true'>&larr;</span> Previous</a></small></li>";
       }
     }
 
@@ -291,6 +291,7 @@
     }
 
     $thisPost['words'] = str_word_count(strip_tags($PD->text($thisPost['body'])));
+    /*
     $readTimeHrs = intval($thisPost['words']/200/60);
     $readTimeMins = intval($thisPost['words']/200) - $readTimeHrs * 60;
     $readTimeSecs = intval($thisPost['words']/200*60) - intval($thisPost['words']/200)*60;
@@ -306,6 +307,14 @@
     }
 
     $thisPost['readTime'] = trim($thisPost['readTime']);
+     */
+    $thisPost['readTime'] = "< 1 min.";
+    if ($thisPost['words'] > 224) {
+      $slowRead = round($thisPost['words']/150);      
+      $fastRead = round($thisPost['words']/200);      
+      $thisPost['readTime'] = "$fastRead - $slowRead mins.";
+    }
+
 
   }
 
@@ -354,6 +363,8 @@
 
 	</head>
 	<body>
+
+		<progress value="0" data-toggle="tooltip" data-placement="bottom" title="Reading Progress"></progress>
 
 		<header>
 			<div class="container">
@@ -659,11 +670,51 @@
           $("#sub-btn").hide();
         });
 
+				$(function () {
+				  $('[data-toggle="tooltip"]').tooltip()
+				})
+
+        var postType = "<?=$thisPost['type'];?>";
+  
+        if (postType == "chapter" || postType == "post") {
+          readProgress();
+
+          $(window).on('resize', function() {
+            readProgress();
+          });
+        }
+
         $(function () {
           $('[data-toggle="tooltip"]').tooltip()
         })
 
 			});
+
+			function readProgress() {
+				var contentPos = $(".content").position().top;
+				var contentSize = $(".content").height();
+				var windowSize = $(window).height();
+				var max = contentPos + contentSize - windowSize - 150;
+				var value = $(window).scrollTop();
+
+				if (max > 0) {
+					$("progress").attr('max', max);
+					$("progress").attr('value', value);
+          var percent = Math.round(value/max*100);
+          $("progress").attr('data-original-title', 'Reading Progress (' + percent + '%)');
+
+					$(document).on('scroll', function() {
+						value = $(window).scrollTop();
+            if (value >= max) {
+              value = max;
+            }
+            percent = Math.round(value/max*100);
+            $("progress").attr('value', value);
+            $("progress").attr('data-original-title', 'Reading Progress (' + percent + '%)');
+					});
+				}
+      }
+
 		</script>
 	</body>
 </html>

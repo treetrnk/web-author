@@ -18,7 +18,7 @@
         <span class="text-muted">
           <?=$date;?><br />
           <span title="Word Count" data-toggle="tooltip" class="badge badge-default"># <?=$thisPost['words'];?></span> <!--&#8226;-->
-          <span title="Average Reading Time (200 wpm)" data-toggle="tooltip" class="badge badge-default"><i class="glyphicon glyphicon-hourglass"></i> <?=$thisPost['readTime'];?></span>
+          <span title="Reading Time (200-150 wpm)" data-toggle="tooltip" class="badge badge-default">&#8987; <?=$thisPost['readTime'];?></span>
         </span>
         
       </small>

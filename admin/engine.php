@@ -195,7 +195,8 @@
                     banner='$banner',
                     tags='$tags',
                     type='$type',
-                    location='$location'$publish1
+                    location='$location',
+                    lastUpdate=CURRENT_TIMESTAMP$publish1
                   WHERE id = $_POST[id]
                 ";
 
@@ -207,6 +208,12 @@
                 if ($action == "addPost") {
                   $pid = mysqli_insert_id($con);
                 }
+
+                $versql = "INSERT INTO postsVer (
+                    postid, title, body, sidebar, author, parent, banner, tags, type, location
+                  ) VALUES (
+                    $pid, '$title', '$body', '$sidebar', '$_SESSION[userid]', '$parent', '$banner', '$tags', '$type', '$location')";
+                mysqli_query($con, $versql);
 
                 //$error = $location;
                 if (!file_exists($locprefix.$location)) {
@@ -246,6 +253,9 @@
 
           $sql = "DELETE FROM posts WHERE id = $_POST[id]";
           if ($result = mysqli_query($con, $sql)) {
+
+            $versql = "DELETE FROM postsVer WHERE postid = $_POST[id]";
+            mysqli_query($con, $versql);
 
             if (file_exists($locprefix.$oldLoc['location'])) {
               rmdirRec($locprefix.$oldLoc['location']);

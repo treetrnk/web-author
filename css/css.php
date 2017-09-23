@@ -188,6 +188,29 @@
         font-family: "Montserrat SemiBold", "Arial Black", Arial, sans-serif;
         text-transform: uppercase;
       }
+			progress {
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100% !important;
+				height: 5px;
+				border: none;
+				-webkit-appearance: none;
+				-moz-appearance: none;
+				appearance: none;
+				background-color: transparent;
+				color: #48a3f2;
+				z-index: 6;
+			}
+			progress::-webkit-progress-bar {
+				background-color: transparent;
+			}
+			progress::-webkit-progress-value {
+				background-color: #48a3f2;
+			}
+			progress::-moz-progress-bar {
+				background-color: #48a3f2;
+			}
 			div.jumbotron {
 				margin-bottom: 0;
 			}
@@ -300,7 +323,7 @@
       }
       #sub-btn-close {
         position: fixed;
-        bottom: 50px;
+        bottom: 55px;
         right: 20px;
         z-index: 2;
       }

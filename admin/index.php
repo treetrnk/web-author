@@ -200,14 +200,6 @@
           $("[data-toggle2='tooltip']").tooltip();
         })
 
-        var words = $('#md-input').val().match(/[a-zA-Z.0-9/-]+/g).length;
-        $('#display_count').text("("+words+" words)");
-        
-        $("#md-input").on('keyup', function(e) {
-          var words = this.value.match(/[a-zA-Z.0-9/-]+/g).length;
-          $('#display_count').text("("+words+" words)");
-        });
-
       });
     </script>
   </body>
