@@ -1,6 +1,9 @@
 <?php
 
-  if (!empty($_POST['subscribe']) && !empty($_POST['email'])) {
+  $_POST['g-recaptcha-response'] = isset($_POST['g-recaptcha-response']) ? $_POST['g-recaptcha-response'] : "";  
+  $_POST['coinhive-captcha-token'] = isset($_POST['coinhive-captcha-token']) ? $_POST['coinhive-captcha-token'] : "";  
+
+  if (!empty($_POST['subscribe']) && !empty($_POST['email']) && (!empty($_POST['g-recaptcha-response'] || !empty($_POST['coinhive-captcha-token'])))) {
 
     $email = mysqli_real_escape_string($con, trim($_POST['email']));
     $fname = NULL;
@@ -14,35 +17,11 @@
       if (mysqli_num_rows($chkresult) > 0) {
         $error = "Your email address is already subscribed.";
       } else {
-
-        $url = "https://www.google.com/recaptcha/api/siteverify";
-        if(isset($_POST['g-recaptcha-response']) && !empty($_POST['g-recaptcha-response'])){
-          //get verified response data
-          $captcha = $_POST['g-recaptcha-response'];
-          $data = array('secret' => $secretKey, 'response' => $captcha);
-
-          $ch = curl_init($url);
-          curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-          curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);  
-          curl_setopt($ch, CURLOPT_POST, true);
-          curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
-          $verifyResponse = curl_exec($ch);
-          curl_close($ch);
-
-          $responseData = json_decode($verifyResponse, true);
-
-          if ($responseData['success']) {
-            $sql = "INSERT INTO subs (fname, lname, email) VALUES ('$fname', '$lname', '$email')";
-            if ($result = mysqli_query($con, $sql)) {
-              $success = "You have successfully subscribed to the mailing list!";
-            } else {
-              $error = "An error occured while trying to add you to the mailing list.";
-            }
-          } else {
-            $error = "No robots allowed! 🤖";
-          }
+        $sql = "INSERT INTO subs (fname, lname, email) VALUES ('$fname', '$lname', '$email')";
+        if ($result = mysqli_query($con, $sql)) {
+          $success = "You have successfully subscribed to the mailing list!";
         } else {
-          $error = "Please click on the reCAPTCHA box.";
+          $error = "An error occured while trying to add you to the mailing list.";
         }
       }
     }
@@ -73,6 +52,8 @@
       $error = "You must provide an email address to unsubscribe with.";
     }
       
-  }
+  } else {
 
+    $error = "Please provide your email address and click the captcha to subscribe.";
+  }
 ?>

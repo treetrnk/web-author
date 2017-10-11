@@ -29,6 +29,7 @@
           <div class="form-actions">
             <div class="row">
               <div class="col-xs-12">
+                <input type="checkbox" name="<?=$honeypot;?>" value="1" style="display: none !important;" tabindex="-1" autocomplete="off" />
                 <button type="submit" class="btn btn-primary btn-block">Log In</button>
                 <a href="../" class="btn btn-default btn-block">Cancel</a>
               </div>
@@ -41,3 +42,21 @@
 
   </div>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script>
+
+  $(document).ready(function() {
+
+    var $honeypot = $("input[name='<?=$honeypot;?>']");
+
+    $("form").submit(function(e) {
+      if ($honeypot.is(':checked')) {
+        e.preventDefault();
+        alert("No robots allowed!");
+      }
+    });
+  
+  });
+
+</script>

@@ -15,6 +15,8 @@
 
 	include "engine.php";
 
+  $honeypot = "iamnotahuman" . rand(0, 99999999);
+
 	$page = "posts";
 	if (!empty($_GET['page'])) {
 		$page = $_GET['page'];

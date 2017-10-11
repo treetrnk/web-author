@@ -172,6 +172,7 @@
 				background-color: #ffffff;
 				background-repeat: no-repeat;
 				background-position: center center;
+        background-attachment: fixed;
 				background-size: cover;
 				padding-top: 89px;
 				height: 450px;
