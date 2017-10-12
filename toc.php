@@ -1,8 +1,8 @@
 <?php 
 
-  if (!empty($thisPost['sidebar'])) {
-    $sidebar = $PD->text($thisPost['sidebar']);
-  } elseif (!empty($parent) && ($thisPost['type'] == 'chapter' || $thisPost['type'] == 'post')) {
+  if (!empty($page->sidebar)) {
+    $sidebar = $PD->text($page->sidebar);
+  } elseif (!empty($parent) && ($page->type == 'chapter' || $page->type == 'post')) {
     $sidebar = $PD->text($parent['sidebar']);
   } else {
     $sidebar = "";
@@ -13,15 +13,15 @@
   ";
 
 /*
-  if ($thisPost['type'] == 'story' || $thisPost['type'] == 'blog') {
-    $sql = "SELECT * FROM posts WHERE parent = $thisPost[id] AND time IS NOT NULL";
+  if ($page->type == 'story' || $page->type == 'blog') {
+    $sql = "SELECT * FROM posts WHERE parent = $page->id AND time IS NOT NULL";
   } else {
-    $sql = "SELECT * FROM posts WHERE parent = $thisPost[parent] AND time IS NOT NULL";
+    $sql = "SELECT * FROM posts WHERE parent = $page->parent AND time IS NOT NULL";
   }
 
   if ($result = mysqli_query($con, $sql)) {
     while ($row = mysqli_fetch_array($result)) {
-      if ($row['id'] == $thisPost['id']) {
+      if ($row['id'] == $page->id) {
         echo "<li><b>$row[title]</b></li>";
       } else {
         echo "<li><a href='$row[location]'>$row[title]</a></li>";
@@ -48,10 +48,10 @@
     }
   }
 
-  if ($thisPost['type'] == 'story' || $thisPost['type'] == 'blog') {
-    findChildren($thisPost['id'], $children, $thisPost['id']);
+  if ($page->type == 'story' || $page->type == 'blog') {
+    findChildren($page->id, $children, $page->id);
   } else {
-    findChildren($thisPost['parent'], $children, $thisPost['id']);
+    findChildren($page->parent, $children, $page->id);
   }
 //  var_dump($children);
 

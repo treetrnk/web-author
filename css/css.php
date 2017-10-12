@@ -168,19 +168,19 @@
         padding: 20px 20px 20px 5px;
       }
 			div.jumbotron {
-    <?="background-image: url($banner);";?>
+        background-image: url("<?=$page->banner;?>");
 				background-color: #ffffff;
 				background-repeat: no-repeat;
 				background-position: center center;
-        background-attachment: fixed;
+        /*background-attachment: fixed;*/
 				background-size: cover;
 				padding-top: 89px;
 				height: 450px;
 				z-index: 1;
 			}
 			body {
-        background-color: <?=$theme['bodybg'];?>;
-        color: <?=$theme['color'];?>;
+        background-color: <?=theme('bodybg');?>;
+        color: <?=theme('color');?>;
 				font-size: 175%;
         font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
         padding-top: 50px;
@@ -227,10 +227,10 @@
 				border-radius: 5px;
         text-transform: uppercase;
 			}
-      <?=$theme['modal'];?>
+      <?=theme('modal');?>
 			section.content-wrapper {
-        background-color: <?=$theme['contentbg'];?>;
-        color: <?=$theme['color'];?>;
+        background-color: <?=theme('contentbg');?>;
+        color: <?=theme('color');?>;
 				padding: 25px;
 				margin-top: -50px;
 				margin-bottom: 50px;
@@ -295,10 +295,10 @@
 				text-decoration: none;
 			}
       ol.breadcrumb {
-        <?=$theme['breadcrumb'];?>
+        <?=theme('breadcrumb');?>
       }
       ul.pager li a {
-        <?=$theme['pager'];?>
+        <?=theme('pager');?>
         line-height: 17px;
       }
 			footer {

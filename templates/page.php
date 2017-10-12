@@ -12,9 +12,9 @@
         </a>
       </small>
     </p>
-    <h1><?=$thisPost['title'];?></h1>
+    <h1><?=$page->title;?></h1>
     <div class="content">
-      <?=$PD->text($thisPost['body']);?>
+      <?=$page->formattedBody;?>
     </div>
   
     <br /><br />

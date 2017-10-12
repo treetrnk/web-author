@@ -1,7 +1,7 @@
 <div class="row">
   <div class="col-md-7 col-md-offset-1 col-sm-12 col-xs-12 content">
     
-    <h1><?=$thisPost['title'];?></h1>
+    <h1><?=$page->title;?></h1>
     <p class="pull-right text-muted" id="theme-select">
       <small>Theme:</small>
       <small>
@@ -13,54 +13,36 @@
         </a>
       </small>
     </p><br />
-    <p>
-      <small>
-        <span class="text-muted">
-          <?=$date;?><br />
-          <span title="Word Count" data-toggle="tooltip" class="badge badge-default"># <?=$thisPost['words'];?></span> <!--&#8226;-->
-          <span title="Reading Time (200-150 wpm)" data-toggle="tooltip" class="badge badge-default">&#8987; <?=$thisPost['readTime'];?></span>
-        </span>
-        
-      </small>
-    </p>
-    <p class="text-muted"><small><?=$date;?></small></p>
+    <p class="text-muted"><small><?=$page->date;?></small></p>
     <nav class="clearfix">
       <ul class="pager">
-        <?="$prevChapLi $nextChapLi";?> 
+        <?=$page->nextPrev();?> 
       </ul>
     </nav>
     <div class="content">
-      <?=$PD->text($thisPost['body']);?>
+      <?=$page->formattedBody;?>
     </div>
   
     <br /><br />
     <div class="row">
       <div class="col-sm-6 col-xs-12">
         <p>
-        <?php
-          if (!empty($thisPost['tags'])) {
-            echo "<i class='glyphicon glyphicon-tag'></i> ";
-            $tags = explode(",", $thisPost['tags']);
-            foreach($tags as $tag) {
-              echo "<a href='/search/?tag=$tag' class='label label-default'>$tag</a> ";
-            }
-          }
-        ?>
+        <?=$page->tags();?>
         </p>
       </div>
       <div class="col-sm-6 col-xs-12 text-right share-btns">
         <small class="text-muted">Share:</small>
-        <?=$sharebtns;?>
+        <?=getShareButtons($page->url);?>
       </div>
     </div>
     <nav aria-label="...">
       <ul class="pager">
-        <?="$prevChapLi $nextChapLi";?> 
+        <?=$page->nextPrev();?> 
       </ul>
     </nav>
   </div>
   <aside class="col-md-3 col-md-offset-0 col-sm-10 col-sm-offset-1 col-xs-12">
-    <?php include "toc.php"; ?>
+    <?=$page->tableOfContents();?>
   </aside>
 </div>
 <div class="row">
@@ -75,7 +57,7 @@
     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
     
     var disqus_config = function () {
-      this.page.url = <?="'http://nathanhare.net$thisPost[location]'";?>;  // Replace PAGE_URL with your page's canonical URL variable
+      this.page.url = <?="'http://nathanhare.net$page->location'";?>;  // Replace PAGE_URL with your page's canonical URL variable
       this.page.identifier = <?="'$pid'";?>; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
     };
 

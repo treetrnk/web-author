@@ -12,24 +12,25 @@
         </a>
       </small>
     </p>
-    <h1><?=$thisPost['title'];?></h1>
-    <!--<p class="text-muted"><small><?=$date;?></small></p>-->
+    <h1><?=$page->title;?></h1>
+    <!--<p class="text-muted"><small><?=$page->date;?></small></p>-->
     <div class="content">
-      <?=$PD->text($thisPost['body']);?>
+      <?=$page->formattedBody;?>
 
       <br />
       <br />
       <?php
-        $postsql = "SELECT * FROM posts WHERE parent = $thisPost[id] AND time < CURRENT_TIMESTAMP ORDER BY sort DESC, time DESC";
-        if ($postresult = mysqli_query($con, $postsql)) {
+        $postsql = "SELECT * FROM posts WHERE parent = $page->id AND time < CURRENT_TIMESTAMP ORDER BY sort DESC, time DESC";
+        if ($postresult = mysqli_query(dbConnect(), $postsql)) {
           while ($row = mysqli_fetch_array($postresult)) {
+            $thisrow = new Page($row['id']);
             $rowdate = date_format(date_create($row['time']), "M. j, Y - g:i A");
             echo "
               <div class='panel panel-default'>
                 <div class='panel-body'>
                   <p class='text-muted pull-right'><small>$rowdate</small></p>
                   <h3><a href='$row[location]'>$row[title]</a></h3>
-                  <p>" . substr(strip_tags($PD->text($row['body'])), 0, 200) . " . . .</p>
+                  <p>" . substr(strip_tags($thisrow->formattedBody), 0, 200) . " . . .</p>
             ";
             if (!empty($row['tags']) && ($row['type'] == 'chapter' || $row['type'] == 'post')) { 
               echo "<p><i class='glyphicon glyphicon-tag'></i> ";
@@ -51,6 +52,6 @@
     <br />
   </div>
   <aside class="col-md-3 col-md-offset-0 col-sm-10 col-sm-offset-1 col-xs-12">
-    <?php include "toc.php"; ?>
+    <?php $page->tableOfContents(); ?>
   </aside>
 </div>
