@@ -3,17 +3,34 @@
 class Page {
 
   // Constructor function //////////////////////////////////////////////////////
-  public function __construct($id, $search=false) {
+  public function __construct($id="", $search=false) {
 
-    $allowedToView = $this->validateUnpublished($id);
+    if (empty($id)) {
+      $path = explode('?', $_SERVER['REQUEST_URI']);
 
-    if ($search) {
-      $this->setSearch();
-    } else {
+      if ($path[0] == '/' || empty($path[0])) {
+        $id = config('home-id');
+      } else if (strtolower($path[0]) == "/search/") {
+        $search = true;
+        $this->setSearch();
+      } else {
+        $post = getPostByLocation($path[0]);
+        $id = !empty($post) ? $post['id'] : config('404-id'); 
+      }
+    }
 
-      $this->id = $allowedToView ? $id : 12; //use suggested else redirect to 404
-      $details = getPostArray($this->id);
-      foreach ($details as $key => $detail) {
+    if (!$search) {
+
+      if (empty($GLOBALS['allposts']["$id"])) {
+        $id = config('404-id'); 
+      } else { 
+        $allowedToView = $this->validateUnpublished($id);
+        $this->id = $allowedToView ? $id : config('404-id');
+      }
+
+      $post = empty($post) ? $GLOBALS['allposts']["$this->id"] : $post;
+      
+      foreach($post as $key => $detail) {
         $this->{$key} = $detail;
       }
 
@@ -35,9 +52,17 @@ class Page {
     }
   }
 
+  // Check if page exists //////////////////////////////////////////////////////
+  public function pageExists($id) {
+    if (in_array($id, $GLOBALS['allposts'])) {
+      return $GLOBALS['allposts']["$id"];
+    }
+    return "";
+  }
+
   // Validate viewing of unpublished page //////////////////////////////////////
   public function validateUnpublished ($id) {
-    $page = getPostArray($id);
+    $page = $GLOBALS['allposts']["$id"];
     if (empty($page["time"]) || strtotime($page["time"]) > strtotime(date("Y-m-d H:i:s"))) {
       if (empty($_GET['preview']) || !password_verify($page["title"], urldecode($_GET['preview']))) {
         return false;

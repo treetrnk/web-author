@@ -1,1 +1,0 @@
-<?php $pid=12; include '/srv/http/index.php'; ?>

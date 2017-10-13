@@ -17,8 +17,8 @@
     return $con;
   }
 
-  // Create Array of posts /////////////////////////////////////////////////////
-  function getPostArray($id = '') {
+  // Create Array of all posts /////////////////////////////////////////////////
+  function getAllPosts($id="") {
     $postsArr = [];
     $sql = "SELECT * FROM posts ORDER BY id";
     if ($result = mysqli_query(dbConnect(), $sql)) {
@@ -27,9 +27,15 @@
       }
     }
     if (!empty($id)) {
-      return $postsArr[$id];
+      return in_array("$id", $postsArr) ? $postsArr["$id"] : '';
     }
     return $postsArr;
+  }
+
+  // Get details of a post /////////////////////////////////////////////////////
+  function getPostArray($id) {
+    //var_dump($GLOBALS['allposts']);
+    return in_array("$id", $GLOBALS['allposts']) ? $GLOBALS['allposts']["$id"] : '';
   }
 
   // Create Array of posts arranged by parent it ///////////////////////////////
@@ -61,6 +67,24 @@
       }
     }
     return "";
+  }
+
+  // Get posts by location /////////////////////////////////////////////////////
+  function getPostByLocation($location) {
+    $allposts = getAllPosts();
+    $location = strtolower(trim($location));
+    $location = explode('/', $location);
+    $temploc = implode('/', $location);
+    $location = $temploc;
+
+    foreach ($allposts as $post) {
+      if (in_array($location, $post)) {
+        $postDetails = $post;
+        break;
+      }
+    }
+
+    return !empty($postDetails) ? $postDetails : '';
   }
 
   //Create array of navigation links ///////////////////////////////////////////

@@ -144,9 +144,7 @@
 							<div class="row">
 								<div class="col-xs-12">
 									<small><label class="control-label">&nbsp;</label></small>
-                  <script src="https://coinhive.com/lib/captcha.min.js" async></script>
                   <div class="coinhive-captcha" data-hashes="512" data-key="<?=config('coinhive-public');?>">
-                    <script src='https://www.google.com/recaptcha/api.js'></script>
                     <div class="g-recaptcha" data-sitekey="<?=config('google-public');?>"></div>
                   </div>
 								</div>
@@ -166,9 +164,6 @@
     <button type="button" class="btn btn-primary" id="sub-btn" data-toggle="modal" data-target="#subscribeMod" title="Subscribe"><i class="glyphicon glyphicon-envelope"></i><span class="hidden-xs"> Subscribe</span></button>
 
 		<section class="container content-wrapper">
-      <!-- jQuery -->
-      <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-
       <?=$page->breadcrumbs();?>
 
       <?php 
@@ -195,6 +190,10 @@
       </p>
 		</footer>
 
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://coinhive.com/lib/captcha.min.js" async></script>
+    <script src='https://www.google.com/recaptcha/api.js'></script>
 		<!-- Latest compiled and minified JavaScript -->
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 		<!--<script src="http://code.jquery.com/jquery.js"></script>

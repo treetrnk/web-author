@@ -6,19 +6,8 @@ include 'Parsedown.php';
 
 session_start();
 
-/*
-if (!empty($_POST['subscribe']) || !empty($_POST['unsubscribe'])) {
-  include 'subscribe.php';
-}
-*/
+$GLOBALS['allposts'] = getAllPosts();
 
-if (empty($pid)) {
-  $pid = 2;
-}
-
-$search = !empty($search) ? $search : false;
-$page = new Page($pid, $search);
+$page = new Page();
 
 require 'templates/main.php';
-
-//var_dump($page);
