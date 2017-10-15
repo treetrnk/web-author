@@ -33,11 +33,11 @@
     <meta property="article:tag" content=<?="'$page->tags'";?> />
     <meta property="fb:admins" content="Facebook numberic ID" />
 
-    <link rel="shortcut icon" href="/images/favicon2.png" type="image/x-icon">
-		<link href="/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link rel="shortcut icon" href="/resources/images/favicon2.png" type="image/x-icon">
+		<link href="/resources/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <!---<script src="https://use.fontawesome.com/0dabb168cf.js"></script>--->
 
-    <?php include "/srv/http/css/css.php" ?>
+    <?php include "/srv/http/resources/css/css.php" ?>
 
 	</head>
 	<body>
@@ -195,7 +195,7 @@
     <script src="https://coinhive.com/lib/captcha.min.js" async></script>
     <script src='https://www.google.com/recaptcha/api.js'></script>
 		<!-- Latest compiled and minified JavaScript -->
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+		<script src="/resources/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 		<!--<script src="http://code.jquery.com/jquery.js"></script>
     <script src="js/bootstrap.min.js"></script>-->
     <script type="text/javascript">

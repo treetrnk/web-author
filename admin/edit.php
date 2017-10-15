@@ -113,7 +113,7 @@
       $time = date_format(date_create($row['time']), "D M d, Y - h:i:s A");
     }
     if (empty($row['time'] || strtotime($row['time']) > strtotime(date("Y-m-d H:i:s")))) {
-      $urlcode = "?preview=" . urlencode(password_hash($row['title'], PASSWORD_DEFAULT));
+      $urlcode = "?preview=" . urlencode(password_hash($row['title'].config('obfuscate'), PASSWORD_DEFAULT));
     }
     echo "<p><a href='$row[location]$urlcode' target='preview'><i class='glyphicon glyphicon-eye-open'></i> View Post</a></p>";
   }

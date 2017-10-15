@@ -8,7 +8,9 @@ class Page {
     if (empty($id)) {
       $path = explode('?', $_SERVER['REQUEST_URI']);
 
-      if ($path[0] == '/' || empty($path[0])) {
+      $path[0] = substr($path[0], -1) != '/' ? $path[0] . '/' : $path[0];
+
+      if ($path[0] == '/' || empty($path[0]) || $path[0] == '/home/') {
         $id = config('home-id');
       } else if (strtolower($path[0]) == "/search/") {
         $search = true;
@@ -21,14 +23,8 @@ class Page {
 
     if (!$search) {
 
-      if (empty($GLOBALS['allposts']["$id"])) {
-        $id = config('404-id'); 
-      } else { 
-        $allowedToView = $this->validateUnpublished($id);
-        $this->id = $allowedToView ? $id : config('404-id');
-      }
-
-      $post = empty($post) ? $GLOBALS['allposts']["$this->id"] : $post;
+      $this->id = $this->validateUnpublished($id);
+      $post = $GLOBALS['allposts']["$this->id"];
       
       foreach($post as $key => $detail) {
         $this->{$key} = $detail;
@@ -38,7 +34,7 @@ class Page {
       $this->formattedBody = $PD->text($this->body);
       $this->description = substr(strip_tags($this->formattedBody), 0, 150) . "...";
       $this->date = (!empty($this->time)) ? date_format(date_create($this->time), "M. j, Y - g:i A") : "";
-      $this->parentDetails = ($this->parent != 0) ? getPostArray($this->parent) : "";
+      $this->parentDetails = ($this->parent != 0) ? $GLOBALS['allposts']["$this->parent"] : "";
       $this->breadcrumbs = ["<li class='active'>$this->title</li>"];
       $this->setParents();
       $this->setBanner();
@@ -52,23 +48,19 @@ class Page {
     }
   }
 
-  // Check if page exists //////////////////////////////////////////////////////
-  public function pageExists($id) {
-    if (in_array($id, $GLOBALS['allposts'])) {
-      return $GLOBALS['allposts']["$id"];
-    }
-    return "";
-  }
-
   // Validate viewing of unpublished page //////////////////////////////////////
   public function validateUnpublished ($id) {
-    $page = $GLOBALS['allposts']["$id"];
-    if (empty($page["time"]) || strtotime($page["time"]) > strtotime(date("Y-m-d H:i:s"))) {
-      if (empty($_GET['preview']) || !password_verify($page["title"], urldecode($_GET['preview']))) {
-        return false;
+    if (empty($GLOBALS['allposts']["$id"])) { // Check if exists
+      return config('404-id');
+    }
+
+    $page = $GLOBALS['allposts']["$id"]; // Check preview code
+    if (empty($page["time"]) || strtotime($page["time"]) > strtotime(date("Y-m-d H:i:s"))) { //if needs preview
+      if (empty($_GET['preview']) || !password_verify($page["title"].config('obfuscate'), urldecode($_GET['preview']))) { //if fail
+        return config('404-id');
       }
     }
-    return true;
+    return $id;
   }
 
   // Set parent details ////////////////////////////////////////////////////////
@@ -81,7 +73,7 @@ class Page {
         $this->parents[] = $crntParent;
         array_unshift($this->breadcrumbs, "<li><a href='$crntParent[location]'>$crntParent[title]</a></li>");
         if ($crntParent['parent'] != 0) {
-          $crntParent = getPostArray($crntParent['parent']);
+          $crntParent = $GLOBALS['allposts']["$crntParent[parent]"];
         } else {
           $crntParent = NULL;
         }
@@ -101,7 +93,7 @@ class Page {
     }
 
     if (empty($this->banner)) {
-      $this->banner = "/images/pine1.png";
+      $this->banner = config('banner');
     }
   }
 
@@ -236,7 +228,7 @@ class Page {
     $this->time = "";
     $this->tags = "";
     $this->location = "/search/";
-    $this->banner = "/images/pine1.png";
+    $this->banner = config('banner');
     $this->titlePrefix = "";
     $this->booktitle = "";
     $this->description = "Search results for $this->keyword.";

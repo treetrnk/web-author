@@ -6,10 +6,10 @@
       <small>Theme:</small>
       <small>
         <a href="?theme=light" id="light-theme" title="Light Theme">
-          <img src="/images/light-theme.png" />
+          <img src="/resources/images/light-theme.png" />
         </a>
         <a href="?theme=dark" id="dark-theme" title="Dark Theme">
-          <img src="/images/dark-theme.png" />
+          <img src="/resources/images/dark-theme.png" />
         </a>
       </small>
     </p><br />
@@ -58,7 +58,8 @@
     
     var disqus_config = function () {
       this.page.url = <?="'http://nathanhare.net$page->location'";?>;  // Replace PAGE_URL with your page's canonical URL variable
-      this.page.identifier = <?="'$pid'";?>; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+      this.page.identifier = "<?=$page->id;?>"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+
     };
 
     (function() { // DON'T EDIT BELOW THIS LINE

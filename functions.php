@@ -17,6 +17,18 @@
     return $con;
   }
 
+  // Set GET variables that Apache hides ///////////////////////////////////////
+  function getGetVars() {
+    $uri = explode('?', $_SERVER['REQUEST_URI']);
+    if (!empty($uri[1])) {
+      $getAssignments = explode('&', $uri[1]);
+      foreach ($getAssignments as $assignment) {
+        $var = explode('=', $assignment);
+        $_GET["$var[0]"] = urldecode($var[1]);
+      }
+    }
+  }
+
   // Create Array of all posts /////////////////////////////////////////////////
   function getAllPosts($id="") {
     $postsArr = [];
@@ -182,10 +194,10 @@
   // Get a list of all of share buttons ////////////////////////////////////////
   function getShareButtons($url) {
     $sharebtns = "
-      <a href='https://plus.google.com/share?url=$url' target='_blank'><img src='/images/googleplus-share.png' /></a> 
-      <a href='https://facebook.com/sharer.php?u=$url' target='_blank'><img src='/images/facebook-share.png' /></a> 
-      <a href='https://www.reddit.com/submit?url=$url' target='_blank'><img src='/images/reddit-share.png' /></a> 
-      <a href='https://twitter.com/share?url=$url' target='_blank'><img src='/images/twitter-share.png' /></a> 
+      <a href='https://plus.google.com/share?url=$url' target='_blank'><img src='/resources/images/googleplus-share.png' /></a> 
+      <a href='https://facebook.com/sharer.php?u=$url' target='_blank'><img src='/resources/images/facebook-share.png' /></a> 
+      <a href='https://www.reddit.com/submit?url=$url' target='_blank'><img src='/resources/images/reddit-share.png' /></a> 
+      <a href='https://twitter.com/share?url=$url' target='_blank'><img src='/resources/images/twitter-share.png' /></a> 
     ";
     return $sharebtns;
   }

@@ -6,10 +6,10 @@
       <small class="hidden-xs">Theme:</small>
       <small>
         <a href="?theme=light" id="light-theme" title="Light Theme">
-          <img src="/images/light-theme.png" />
+          <img src="/resources/images/light-theme.png" />
         </a>
         <a href="?theme=dark" id="dark-theme" title="Dark Theme">
-          <img src="/images/dark-theme.png" />
+          <img src="/resources/images/dark-theme.png" />
         </a>
       </small>
     </p>
@@ -21,15 +21,7 @@
     <br /><br />
     <div class="row">
       <div class="col-sm-6 col-xs-12">
-        <?php
-          if (!empty($thisPost['tags'])) {
-            echo "<i class='glyphicon glyphicon-tag'></i> ";
-            $tags = explode(",", $thisPost['tags']);
-            foreach($tags as $tag) {
-              echo "<a href='/search/?tag=$tag' class='label label-default'>$tag</a> ";
-            }
-          }
-        ?>
+        <?=$page->tags();?>
       </div>
       <div class="col-sm-6 col-xs-12 text-right share-btns">
         <small class="text-muted">Share:</small>
@@ -61,7 +53,7 @@
     
     var disqus_config = function () {
       this.page.url = <?="'http://nathanhare.net$page->location'";?>;  // Replace PAGE_URL with your page's canonical URL variable
-      this.page.identifier = <?="'$pid'";?>; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+      this.page.identifier = "<?=$page->id;?>"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
     };
 
     (function() { // DON'T EDIT BELOW THIS LINE

@@ -1,19 +1,19 @@
 		<style>
       @font-face {
         font-family: "Open Sans";
-        src: url(/css/fonts/OpenSans-Regular.ttf);
+        src: url(/resources/css/fonts/OpenSans-Regular.ttf);
       }
       @font-face {
         font-family: "Montserrat";
-        src: url(/css/fonts/Montserrat-Regular.ttf);
+        src: url(/resources/css/fonts/Montserrat-Regular.ttf);
       }
       @font-face {
         font-family: "Montserrat SemiBold";
-        src: url(/css/fonts/Montserrat-SemiBold.ttf);
+        src: url(/resources/css/fonts/Montserrat-SemiBold.ttf);
       }
       @font-face {
         font-family: "Yesteryear";
-        src: url(/css/fonts/Yesteryear-Regular.ttf);
+        src: url(/resources/css/fonts/Yesteryear-Regular.ttf);
       }
 			header {
 				background-color: #0b5394; /*let user set*/

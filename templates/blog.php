@@ -5,10 +5,10 @@
       <small class="hidden-xs">Theme:</small>
       <small>
         <a href="?theme=light" id="light-theme" title="Light Theme">
-          <img src="/images/light-theme.png" />
+          <img src="/resources/images/light-theme.png" />
         </a>
         <a href="?theme=dark" id="dark-theme" title="Dark Theme">
-          <img src="/images/dark-theme.png" />
+          <img src="/resources/images/dark-theme.png" />
         </a>
       </small>
     </p>
@@ -32,14 +32,7 @@
                   <h3><a href='$row[location]'>$row[title]</a></h3>
                   <p>" . substr(strip_tags($thisrow->formattedBody), 0, 200) . " . . .</p>
             ";
-            if (!empty($row['tags']) && ($row['type'] == 'chapter' || $row['type'] == 'post')) { 
-              echo "<p><i class='glyphicon glyphicon-tag'></i> ";
-              $tags = explode(",", $row['tags']);
-              foreach($tags as $tag) {
-                echo "<a href='/search/?tag=$tag' class='label label-default'>$tag</a> ";
-              }
-              echo "</p>"; 
-            }
+            $thisrow->tags();
             echo "
                 </div>
               </div>

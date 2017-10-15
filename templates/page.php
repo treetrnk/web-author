@@ -5,10 +5,10 @@
       <small class="hidden-xs">Theme:</small>
       <small>
         <a href="?theme=light" id="light-theme" title="Light Theme">
-          <img src="/images/light-theme.png" />
+          <img src="/resources/images/light-theme.png" />
         </a>
         <a href="?theme=dark" id="dark-theme" title="Dark Theme">
-          <img src="/images/dark-theme.png" />
+          <img src="/resources/images/dark-theme.png" />
         </a>
       </small>
     </p>

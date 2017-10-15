@@ -176,6 +176,7 @@
                   $publish1 = ", time = NULL";
                 }
 
+                /*
                 $oldLocSql = "SELECT location FROM posts WHERE id = $_POST[id] LIMIT 1";
                 $oldLoc = mysqli_fetch_array(mysqli_query($con, $oldLocSql));
 
@@ -184,6 +185,7 @@
                     rmdirRec($locprefix.$oldLoc['location']);
                   }
                 }
+                 */
 
                 $sql = "
                   UPDATE posts SET
@@ -215,6 +217,7 @@
                     $pid, '$title', '$body', '$sidebar', '$_SESSION[userid]', '$parent', '$banner', '$tags', '$type', '$location')";
                 mysqli_query($con, $versql);
 
+                /*
                 //$error = $location;
                 if (!file_exists($locprefix.$location)) {
                   mkdir($locprefix.$location, 0775, true) or die("Unable to create directory");             
@@ -223,7 +226,7 @@
                 $txt = '<?php $pid=' . $pid . "; include '$locprefix/index.php'; ?>";
                 fwrite($myfile, $txt);
                 fclose($myfile);
-
+                */
                 $success = "Successfully saved post.";
                 $page = "posts";
               } else { 
@@ -245,11 +248,13 @@
       case 'deletePost': //////////////////////////////////////////////////////
         
         if (isset($_SESSION['userid'])) {
+          /*
           $oldLocSql = "SELECT location FROM posts WHERE id = $_POST[id] LIMIT 1";
           $oldLoc = ["location" => ""];
           if ($locResult = mysqli_query($con, $oldLocSql)) {
             $oldLoc = mysqli_fetch_array($locResult);
           }
+*/
 
           $sql = "DELETE FROM posts WHERE id = $_POST[id]";
           if ($result = mysqli_query($con, $sql)) {
@@ -257,11 +262,13 @@
             $versql = "DELETE FROM postsVer WHERE postid = $_POST[id]";
             mysqli_query($con, $versql);
 
+            /*
             if (file_exists($locprefix.$oldLoc['location'])) {
               rmdirRec($locprefix.$oldLoc['location']);
             } else {
               $error = "Failed to delete  post's directory.<br />Error: <code>" . mysqli_error($con) . "</code><br />SQL: <code>$sql</code>";
             }
+             */
             $success = "Post successfully deleted.";
           } else {
             $error = "Failed to delete post.<br />Error: <code>" . mysqli_error($con) . "</code><br />SQL: <code>$sql</code>";
