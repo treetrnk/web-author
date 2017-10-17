@@ -283,3 +283,7 @@
     }
   }
 
+  // Subscribe if requested ////////////////////////////////////////////////////
+  function subscribe() {
+    return true;
+  }

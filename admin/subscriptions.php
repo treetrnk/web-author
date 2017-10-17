@@ -3,7 +3,7 @@
   $sql = "SELECT * FROM subs ORDER BY fname";
 
   $numSubs = 0;
-  if ($result = mysqli_query($con, $sql)) {
+  if ($result = mysqli_query(dbConnect(), $sql)) {
     $numSubs = mysqli_num_rows($result);
   }
 

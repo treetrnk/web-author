@@ -1,19 +1,9 @@
 <?php
 
+  require "/srv/http/functions.php";
+
 	$approot = 'http://nathanhare.net/';
 
-	include "../dbconnect.php";
-  // Create connection
-  $con = new mysqli($servername, $username, $password, $db);
-  global $con;
-
-  // Check connection
-  if (mysqli_connect_errno()) {
-    echo "Failed to connect to MySQL: " . mysqli_connect_error();
-    die();
-  }
-
-  require "/srv/http/functions.php";
 	include "engine.php";
 
   $honeypot = "iamnotahuman" . rand(0, 99999999);
@@ -38,7 +28,7 @@
 
   $postsArr = array();
   $sql = "SELECT * FROM posts";
-  if ($result = mysqli_query($con, $sql)) {
+  if ($result = mysqli_query(dbConnect(), $sql)) {
     while ($row = mysqli_fetch_array($result)) {
       $postsArr[$row['id']] = $row;
     }

@@ -9,5 +9,6 @@ session_start();
 getGetVars();
 $GLOBALS['allposts'] = getAllPosts();
 $page = new Page();
+subscribe();
 
 require 'templates/main.php';

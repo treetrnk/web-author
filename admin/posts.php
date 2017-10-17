@@ -40,7 +40,7 @@
         </thead>
         <tbody>
       <?php
-        if ($result = mysqli_query($con, "SELECT * FROM posts WHERE time < CURRENT_TIMESTAMP ORDER BY SUBSTRING(location, 1, LENGTH(location) - LENGTH(SUBSTRING_INDEX(REVERSE(location), '/', 2))) ASC, sort ASC, time ASC, title ASC")) {
+        if ($result = mysqli_query(dbConnect(), "SELECT * FROM posts WHERE time < CURRENT_TIMESTAMP ORDER BY SUBSTRING(location, 1, LENGTH(location) - LENGTH(SUBSTRING_INDEX(REVERSE(location), '/', 2))) ASC, sort ASC, time ASC, title ASC")) {
           while ($row = mysqli_fetch_assoc($result)) {
             $urlcode = "";
             $class = "";
@@ -93,7 +93,7 @@
         </thead>
         <tbody>
       <?php
-        if ($result = mysqli_query($con, "SELECT * FROM posts WHERE time > CURRENT_TIMESTAMP OR time IS NULL ORDER BY SUBSTRING(location, 1, LENGTH(location) - LENGTH(SUBSTRING_INDEX(REVERSE(location), '/', 2))) ASC, sort ASC, time ASC, title ASC")) {
+        if ($result = mysqli_query(dbConnect(), "SELECT * FROM posts WHERE time > CURRENT_TIMESTAMP OR time IS NULL ORDER BY SUBSTRING(location, 1, LENGTH(location) - LENGTH(SUBSTRING_INDEX(REVERSE(location), '/', 2))) ASC, sort ASC, time ASC, title ASC")) {
           while ($row = mysqli_fetch_assoc($result)) {
             $urlcode = "";
             $class = "";

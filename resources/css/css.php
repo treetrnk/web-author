@@ -175,7 +175,7 @@
         /*background-attachment: fixed;*/
 				background-size: cover;
 				padding-top: 89px;
-				height: 450px;
+        <?= ($page->type == 'page') ? "height: 200px;" : "height: 450px;"; ?>
 				z-index: 1;
 			}
 			body {
@@ -183,7 +183,7 @@
         color: <?=theme('color');?>;
 				font-size: 175%;
         font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-        padding-top: 50px;
+        padding-top: 68px;
 			}
       h1, h2, h3, h4 {
         font-family: "Montserrat SemiBold", "Arial Black", Arial, sans-serif;
@@ -327,5 +327,8 @@
         bottom: 55px;
         right: 20px;
         z-index: 2;
+      }
+      .spacer {
+        height: 100px;
       }
 		</style>

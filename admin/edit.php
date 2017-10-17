@@ -31,11 +31,11 @@
 
   } elseif ($action == "Edit") {
     if (!empty($_GET['ver'])) {
-      $result = mysqli_query($con, "SELECT * FROM postsVer WHERE postid = $pid AND id = $_GET[ver] LIMIT 1");
+      $result = mysqli_query(dbConnect(), "SELECT * FROM postsVer WHERE postid = $pid AND id = $_GET[ver] LIMIT 1");
       $row = mysqli_fetch_assoc($result);
       $row['time'] = NULL;
     } else {
-      $result = mysqli_query($con, "SELECT * FROM posts WHERE id = $pid LIMIT 1");
+      $result = mysqli_query(dbConnect(), "SELECT * FROM posts WHERE id = $pid LIMIT 1");
       $row = mysqli_fetch_assoc($result);
     }
 
@@ -82,7 +82,7 @@
     ";
 
     $versql = "SELECT * FROM postsVer WHERE postid = $pid ORDER BY lastUpdate DESC";
-    if ($verresult = mysqli_query($con, $versql)) {
+    if ($verresult = mysqli_query(dbConnect(), $versql)) {
       $first = true;
       while ($ver = mysqli_fetch_array($verresult)) {
         $selected = "";
@@ -132,7 +132,7 @@
             <select name='parent' class='form-control' />
               <option value=''>(none)</option>";
 
-              if ($result = mysqli_query($con, "SELECT * FROM posts ORDER BY $locOrder, sort, title")) {
+              if ($result = mysqli_query(dbConnect(), "SELECT * FROM posts ORDER BY $locOrder, sort, title")) {
                 // Add the following to the query above to limit it to first and second tier posts only.
                 // WHERE (length(location)-length(replace(location, '/', ''))) < 4 
                 while ($curpost = mysqli_fetch_assoc($result)) {

@@ -82,6 +82,7 @@
 			</ul>
 		</nav>
 
+    <?php //if ($page->type != 'page') { ?>
 		<div class="jumbotron banner">
 			<div class="container">
 				<br /><br /><br /><br />
@@ -89,7 +90,10 @@
         <!--
         -->
 			</div>
-		</div>
+    </div>
+    <?php /*} else { ?>
+    <div class='spacer'>&nbsp;</div>
+    <?php }*/ ?>
 
 		<!-- Modal -->
 		<div class="modal fade" id="searchMod" tabindex="-1" role="dialog" aria-labelledby="searchModLabel">

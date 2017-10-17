@@ -7,7 +7,7 @@
 
   $sql = "SELECT *, $locOrder as parentLoc FROM posts ORDER BY parentLoc ASC, sort ASC, time ASC, title ASC";
 
-  if ($result = mysqli_query($con, $sql)) { 
+  if ($result = mysqli_query(dbConnect(), $sql)) { 
     $curPL = "";
     while ($row = mysqli_fetch_array($result)) {
       if ($row['parentLoc'] != $curPL) {
