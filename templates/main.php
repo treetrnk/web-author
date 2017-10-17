@@ -37,7 +37,7 @@
 		<link href="/resources/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <!---<script src="https://use.fontawesome.com/0dabb168cf.js"></script>--->
 
-    <?php include "/srv/http/resources/css/css.php" ?>
+    <?php include "/srv/http/writing/resources/css/css.php" ?>
 
 	</head>
 	<body>
