@@ -192,6 +192,9 @@
         <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" target="_blank">CC BY-NC-SA 3.0</a>
         and <a href="https://creativecommons.org/licenses/by-nc/3.0/" target="_blank">CC BY-NC 3.0</a>, respectively
       </p>
+      <p class="text-center">
+        "<a href="https://www.reddit.com/r/wallpapers/comments/3npdce/1920x1080_october_forest_variant_in_comments/" target="_blank">October Forest (green variant)</a>" by Aaron Hoek is used with permission.
+      </p>
 		</footer>
 
     <!-- jQuery -->

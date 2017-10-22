@@ -175,7 +175,7 @@
         /*background-attachment: fixed;*/
 				background-size: cover;
 				padding-top: 89px;
-        <?= ($page->type == 'page') ? "height: 200px;" : "height: 450px;"; ?>
+        <?= ($page->type == 'page' || $page->type == 'blog') ? "height: 200px;" : "height: 450px;"; ?>
 				z-index: 1;
 			}
 			body {
@@ -330,5 +330,8 @@
       }
       .spacer {
         height: 100px;
+      }
+      .modal-dialog, .modal-content {
+        border-radius: 0;
       }
 		</style>

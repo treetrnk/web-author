@@ -102,7 +102,8 @@
             }
             if (empty($row['time'] || strtotime($row['time']) > strtotime(date("Y-m-d H:i:s")))) {
               $urlcode = "?preview=" . urlencode(password_hash($row['title'].config('obfuscate'), PASSWORD_DEFAULT));
-              $class = "warning";
+              //$class = "warning";
+              $class = "";
             }
             echo "
               <tr class='$class'>
