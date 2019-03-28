@@ -84,7 +84,6 @@
 			body {
 				padding-top: 75px;
 				padding-bottom: 25px;
-        background-image: url(https://www.toptal.com/designers/subtlepatterns/patterns/stardust.png);
 			}
 			.logout {
 				line-height: 50px;
@@ -100,9 +99,6 @@
         font-family: inherit;
       }
       section.container {
-        background-color: #222222;
-        color: #aaaaaa;
-				box-shadow:         3px 3px 25px 1px #222;
         padding: 20px;
       }
 		</style>

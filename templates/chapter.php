@@ -12,7 +12,7 @@
           <img src="/resources/images/dark-theme.png" />
         </a>
       </small>
-    </p><br />
+    </p>
     <p>
       <small>
         <span class="text-muted">
@@ -23,7 +23,9 @@
         
       </small>
     </p>
+<!--
     <p class="text-muted"><small><?=$page->date;?></small></p>
+-->
     <nav class="clearfix">
       <ul class="pager">
         <?=$page->nextPrev();?> 
