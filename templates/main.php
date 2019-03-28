@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-  <title><?=$page->titlePrefix.$page->title;?> - Nathan Hare</title>
+  <title><?=$page->titlePrefix.$page->title;?> - Houston Hare</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <meta name="description" content=<?="'$page->description'";?> />
@@ -23,10 +23,10 @@
     <!-- Open Graph data -->
     <meta property="og:title" content=<?="'$page->title'";?> />
     <meta property="og:type" content="article" />
-    <meta property="og:url" content=<?="'http://nathanhare.net$page->location'";?> />
+    <meta property="og:url" content=<?="'http://houstonhare.com$page->location'";?> />
     <meta property="og:image" content=<?="'$page->banner'";?> />
     <meta property="og:description" content=<?="'$page->description'";?> />
-    <meta property="og:site_name" content="The Writings of Nathan Hare" />
+    <meta property="og:site_name" content="Stories by: Houston Hare" />
     <meta property="article:published_time" content=<?="'$page->time'";?> />
     <meta property="article:modified_time" content=<?="'$page->time'";?> />
     <meta property="article:section" content="<?=$page->section?>" />
@@ -49,8 +49,8 @@
 				<div class="row">
 					<div class="col-md-4 col-sm-10 col-xs-10 site-title">
 						<a href="/">
-							<span class="small">The Writings Of</span>
-							<h2>Nathan Hare</h2>
+							<span class="small">Stories by:</span>
+							<h2>Houston Hare</h2>
 						</a>
 					</div>
 					<nav class="col-md-8 col-sm-2 col-xs-2 navlinks small text-right">
@@ -184,7 +184,7 @@
     </section>
 
 		<footer class="text-muted small">
-			<p class="text-center">&#169; Copyright 2017, Nathan Hare</a>
+			<p class="text-center">&#169; Copyright 2017, Houston Hare</a>
       <p class="text-center">
         "<a href="http://www.newgrounds.com/art/view/llamareaper/fantasy-landscape-2" target="_blank">Fantasy Landscape</a>" 
         and "<a href="http://www.newgrounds.com/art/view/llamareaper/pumpkinbutts" target="_blank">Pumpkinbutts.</a>"
