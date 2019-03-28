@@ -26,7 +26,7 @@
     <meta property="og:url" content=<?="'http://houstonhare.com$page->location'";?> />
     <meta property="og:image" content=<?="'$page->banner'";?> />
     <meta property="og:description" content=<?="'$page->description'";?> />
-    <meta property="og:site_name" content="Stories by: Houston Hare" />
+    <meta property="og:site_name" content="Stories by Houston Hare" />
     <meta property="article:published_time" content=<?="'$page->time'";?> />
     <meta property="article:modified_time" content=<?="'$page->time'";?> />
     <meta property="article:section" content="<?=$page->section?>" />
@@ -49,7 +49,7 @@
 				<div class="row">
 					<div class="col-md-4 col-sm-10 col-xs-10 site-title">
 						<a href="/">
-							<span class="small">Stories by:</span>
+							<span class="small">Stories by</span>
 							<h2>Houston Hare</h2>
 						</a>
 					</div>
