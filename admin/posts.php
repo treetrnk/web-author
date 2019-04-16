@@ -32,9 +32,9 @@
           <tr>
             <th>Actions</th>
             <th>Title</th>
+            <th>Words</th>
             <th>Location</th>
             <th>Type</th>
-            <th>Words</th>
             <th width="175">Posted</th>
             <th width="50"></th>
           </tr>
@@ -59,9 +59,9 @@
                   <a href='$row[location]$urlcode' class='btn btn-default btn-sm' target='preview' data-toggle='tooltip' title='View'><i class='glyphicon glyphicon-eye-open'></i></a>
                 </td>
                 <th>$row[title]</th>
+								<td>" . str_word_count($row['body'],0,"&#039;") . "</td>
                 <td>$row[location]</td>
                 <td>" . ucfirst($row['type']) . "</td>
-								<td>" . str_word_count($row['body']) . "</td>
                 <td>$row[time]</td>
                 <td>
                   <button type='button' class='btn btn-xs btn-danger' data-toggle='modal' data-toggle2='tooltip' title='Delete' data-target='#delMod' data-id='$row[id]' data-title='$row[title]' data-location='$row[location]'><i class='glyphicon glyphicon-remove'></i></button>
@@ -87,9 +87,9 @@
           <tr>
             <th>Actions</th>
             <th>Title</th>
+            <th>Words</th>
             <th>Location</th>
             <th>Type</th>
-            <th>Words</th>
             <th width="50"></th>
           </tr>
         </thead>
@@ -114,9 +114,9 @@
                   <a href='$row[location]$urlcode' class='btn btn-default btn-sm' target='preview' data-toggle='tooltip' title='View'><i class='glyphicon glyphicon-eye-open'></i></a>
                 </td>
                 <th>$row[title]</th>
+								<td>" . str_word_count($row['body'],0,"&#039;") . "</td>
                 <td>$row[location]</td>
                 <td>" . ucfirst($row['type']) . "</td>
-								<td>" . str_word_count($row['body']) . "</td>
                 <td>
                   <button type='button' class='btn btn-xs btn-danger' data-toggle='modal' data-toggle2='tooltip' title='Delete' data-target='#delMod' data-id='$row[id]' data-title='$row[title]' data-location='$row[location]'><i class='glyphicon glyphicon-remove'></i></button>
                 </td>
