@@ -90,10 +90,10 @@
           $selected = 'selected';
         }
         if ($first) {
-          echo "<option value='/admin/?page=edit&pid=$pid' $selected>" . date_format(date_create($ver['lastUpdate']), "M. j, Y - g:i A") . " (Current)</option>";
+          echo "<option value='/admin/?page=edit&pid=$pid' $selected>" . date_format(date_create($ver['lastUpdate']), "M. j, Y - g:i A") . " #" . str_word_count($ver['body'],0,'&#039;') . " (Current)</option>";
           $first = false;
         } else {
-          echo "<option value='/admin/?page=edit&pid=$pid&ver=$ver[id]' $selected>" . date_format(date_create($ver['lastUpdate']), "M. j, Y - g:i A") . "</option>";
+          echo "<option value='/admin/?page=edit&pid=$pid&ver=$ver[id]' $selected>" . date_format(date_create($ver['lastUpdate']), "M. j, Y - g:i A") . " #" . str_word_count($ver['body'],0,'&#039;') . "</option>";
         }
       }
     }
