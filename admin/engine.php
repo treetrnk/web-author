@@ -127,9 +127,9 @@
 
             $toRemove = array("!", "&#39;", "@", "#", "$", "%", "^", "&", "*", "(", ")", "_", "=", "+", "[", "{", "]", "}", ";", ":", "'", '"', ",", "<", ".", ">", "/", "?", "\\", "|", "`", "~");
 
-						$thisfolder = strtolower(str_replace("-", "", $thisFolder));
+						$thisFolder = strtolower(str_replace("-", "", $title));
             $thisFolder = str_replace(".", "-", str_replace(" ", "-", $thisFolder));
-            $thisFolder = strRemove($toRemove, $title);
+            $thisFolder = strRemove($toRemove, $thisFolder);
             $location = "$parentloc$thisFolder/";
 
             $extrasql = "";
