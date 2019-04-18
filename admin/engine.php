@@ -125,10 +125,11 @@
               $parentloc = $parentdata['location'];
             }
 
-            $toRemove = array("!", "&#39;", "@", "#", "$", "%", "^", "&", "*", "(", ")", "-", "_", "=", "+", "[", "{", "]", "}", ";", ":", "'", '"', ",", "<", ".", ">", "/", "?", "\\", "|", "`", "~");
+            $toRemove = array("!", "&#39;", "@", "#", "$", "%", "^", "&", "*", "(", ")", "_", "=", "+", "[", "{", "]", "}", ";", ":", "'", '"', ",", "<", ".", ">", "/", "?", "\\", "|", "`", "~");
 
+						$thisfolder = strtolower(str_replace("-", "", $thisFolder));
+            $thisFolder = str_replace(".", "-", str_replace(" ", "-", $thisFolder));
             $thisFolder = strRemove($toRemove, $title);
-            $thisFolder = strtolower(str_replace(".", "-", str_replace(" ", "-", $thisFolder)));
             $location = "$parentloc$thisFolder/";
 
             $extrasql = "";
