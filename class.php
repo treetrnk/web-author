@@ -99,7 +99,7 @@ class Page {
 
   // Set word count and read time //////////////////////////////////////////////
   public function setWords() {
-    $this->words = str_word_count(strip_tags($this->formattedBody));
+    $this->words = str_word_count(strip_tags($this->formattedBody),0,"&#039;");
     $this->readTime = "< 1 min.";
     if ($this->words > 224) {
       $slowRead = round($this->words/150);      
