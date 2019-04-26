@@ -113,7 +113,7 @@ class Page {
 	public function total_word_count() {
 		$wordcount = 0;
 		$children = $this->children;
-		foreach($children as $child) {	
+		foreach($children->fetch_assoc() as $child) {	
 			$c = new Page($child["id"]);
 			$wordcount += $c->words;
 		}
