@@ -112,7 +112,7 @@ class Page {
 	// Get total word count of story /////////////////////////////////////////////
 	public function total_word_count() {
 		$wordcount = 0;
-		$children = $this->children->fetch_assoc();
+		$children = $this->children;
 		foreach($children as $child) {	
 			$c = new Page($child["id"]);
 			$wordcount += $c->words;
