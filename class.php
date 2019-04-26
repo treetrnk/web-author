@@ -119,8 +119,10 @@ class Page {
 		$this->total_word_count = $wordcount;
 	}
 
+	// Get total read time ///////////////////////////////////////////////////////
 	public function total_read_time() {
 		return round($this->total_word_count/200) . " - " . round($this->total_word_count/150) . " mins.";
+	}
 
   // Set booktitle and title prefix ////////////////////////////////////////////
   public function setBooktitle() {
