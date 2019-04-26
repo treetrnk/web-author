@@ -112,16 +112,17 @@ class Page {
 	// Get total word count of story /////////////////////////////////////////////
 	public function total_word_count() {
 		$wordcount = 0;
-		foreach($this->children as $child) {	
+		$children = $this->children->fetch_assoc()
+		foreach($children as $child) {	
 			$c = new Page($child["id"]);
 			$wordcount += $c->words;
 		}
-		$this->total_word_count = $wordcount;
+		$this->total_words = $wordcount;
 	}
 
 	// Get total read time ///////////////////////////////////////////////////////
 	public function total_read_time() {
-		return round($this->total_word_count/200) . " - " . round($this->total_word_count/150) . " mins.";
+		return round($this->total_words/200) . " - " . round($this->total_words/150) . " mins.";
 	}
 
   // Set booktitle and title prefix ////////////////////////////////////////////

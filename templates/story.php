@@ -18,7 +18,7 @@
       <small>
         <span class="text-muted">
           <?=$page->date;?><br />
-          <span title="Word Count" data-toggle="tooltip" class="badge badge-default"># <?=total_word_count?></span>
+          <span title="Word Count" data-toggle="tooltip" class="badge badge-default"># <?=$page->total_words?></span>
           <span title="Reading Time (200-150 wpm)" data-toggle="tooltip" class="badge badge-default">&#8987; <?=$page->total_read_time();?></span>
         </span>
         
