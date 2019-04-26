@@ -13,6 +13,16 @@
         </a>
       </small>
     </p>
+    </p>
+    <p>
+      <small>
+        <span class="text-muted">
+          <?=$page->date;?><br />
+          <span title="Word Count" data-toggle="tooltip" class="badge badge-default"># <?=total_word_count?></span>
+          <span title="Reading Time (200-150 wpm)" data-toggle="tooltip" class="badge badge-default">&#8987; <?=$page->total_read_time();?></span>
+        </span>
+        
+      </small>
     <p class="text-muted"><small><?=$page->date;?></small></p>
     <div class="content">
       <?=$page->formattedBody;?>

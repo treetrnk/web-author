@@ -43,6 +43,7 @@ class Page {
       $this->search = false;
       $this->children = getChildren($this->id);
       $this->setWords();
+			$this->total_word_count();
       $this->setBooktitle();
       $this->setSidebar();
     }
@@ -107,6 +108,19 @@ class Page {
       $this->readTime = "$fastRead - $slowRead mins.";
     }
   }
+
+	// Get total word count of story /////////////////////////////////////////////
+	public function total_word_count() {
+		$wordcount = 0;
+		foreach($this->children as $child) {	
+			$c = new Page($child["id"]);
+			$wordcount += $c->words;
+		}
+		$this->total_word_count = $wordcount;
+	}
+
+	public function total_read_time() {
+		return round($this->total_word_count/200) . " - " . round($this->total_word_count/150) . " mins.";
 
   // Set booktitle and title prefix ////////////////////////////////////////////
   public function setBooktitle() {
